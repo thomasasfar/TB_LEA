@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::get('/barang', [App\Http\Controllers\BarangController::class, 'index']);
+Route::post('/barang/tambah', [App\Http\Controllers\BarangController::class, 'store']);
+Route::delete('/barang/{barang}/hapus', [App\Http\Controllers\BarangController::class, 'destroy']);
+Route::put('/barang/{barang}/update', [App\Http\Controllers\BarangController::class, 'update']);
