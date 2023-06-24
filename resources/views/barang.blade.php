@@ -142,8 +142,8 @@
                                 <select class="form-select" id="status" aria-label="Default select example"
                                     name="status">
                                     <option selected>Pilih</option>
-                                    <option value="H 2.1">Tersedia</option>
-                                    <option value="H 2.2">Tidak Tersedia</option>
+                                    <option value="Tersedia">Tersedia</option>
+                                    <option value="Tidak tersedia">Tidak Tersedia</option>
                                 </select>
                             </div>
                     </div>
