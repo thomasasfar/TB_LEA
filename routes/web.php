@@ -20,4 +20,7 @@ Route::get('/barang', [App\Http\Controllers\BarangController::class, 'index']);
 Route::post('/barang/tambah', [App\Http\Controllers\BarangController::class, 'store']);
 Route::delete('/barang/{barang}/hapus', [App\Http\Controllers\BarangController::class, 'destroy']);
 Route::put('/barang/{barang}/update', [App\Http\Controllers\BarangController::class, 'update']);
- Route::get('/login',[AuthController::class,'login']);
+ 
+
+Route::get('/login',[AuthController::class,'login']);
+ Route::get('/register',[AuthController::class,'register']);
