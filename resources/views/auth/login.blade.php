@@ -34,7 +34,7 @@
                         <form action="/inventaris/login" class="login-form" method="post">
                             @csrf
                             <div class="form-group">
-                                <input type="email" class="form-control rounded-left" placeholder="email "
+                                <input type="email" class="form-control rounded-left" placeholder="Email "
                                     value="{{ Session::get('email') }}" name="email" required />
                             </div>
                             <div class="form-group d-flex">
