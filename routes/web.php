@@ -1,5 +1,5 @@
 <?php
-use App\Http\Controllers\AuthController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,5 +22,4 @@ Route::delete('/barang/{barang}/hapus', [App\Http\Controllers\BarangController::
 Route::put('/barang/{barang}/update', [App\Http\Controllers\BarangController::class, 'update']);
  
 
-Route::get('/login',[AuthController::class,'login']);
- Route::get('/register',[AuthController::class,'register']);
+
