@@ -1,79 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('template')
 
-<head>
-    <title>Login</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+@section('title')
+    Barang
+@endsection
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet" />
+@section('konten')
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-
-    <link href={{ asset('../css/loginstyle.css') }} rel="stylesheet">
-</head>
-
-<body>
-    <section class="ftco-section">
-
-        <div class="container">
-            <div class="row justify-content-center">
-                <!-- <div class="col-md-6 text-center mb-5">
-     <h2 class="heading-section">Login #08</h2>
-    </div> -->
+<section class="vh-100">
+    <div class="container-fluid h-custom">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+            <div class="card-body p-1 text-center">
+                <h3 class="mb-5">Sign in</h3>
+              </div>
+          <form action="/auth/login" method="post">
+            @csrf
+            <!-- Username input -->
+            <div class="form-outline mb-4">
+              <label class="form-label" for="form3Example3">Username</label>
+              <input
+                type="text"
+                id="username"
+                class="form-control form-control-lg"
+                placeholder="Enter your username"
+                name="username"
+              />
             </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6 col-lg-5">
-                    <div class="login-wrap p-4 p-md-5">
-                        <div class="icon d-flex align-items-center justify-content-center">
-                            <span class="fa fa-user-o"></span>
-                        </div>
 
-                        <h3 class="text-center mb-4">LOGIN</h3>
-
-                        <form action="/inventaris/login" class="login-form" method="post">
-                            @csrf
-                            <div class="form-group">
-                                <input type="email" class="form-control rounded-left" placeholder="mail "
-                                    value="{{ Session::get('email') }}" name="email" required />
-                            </div>
-                            <div class="form-group d-flex">
-                                <input type="password" class="form-control rounded-left" name="password"
-                                    placeholder="Password" required />
-                            </div>
-                            <div class="form-group d-md-flex">
-                                <!-- <div class="w-50">
-                                        <label
-                                            class="checkbox-wrap checkbox-primary"
-                                            >Remember Me
-                                            <input type="checkbox" checked />
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </div> -->
-                                <!-- <div class="w-30 text-md-right">
-                                        <a href="#">Forgot Password</a>
-                                    </div> -->
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary rounded submit p-3 px-5">
-                                    Login
-                                </button>
-                                <br>
-                                <br>
-                                <br>
-                                <a href="http://127.0.0.1:8000/register">don't have an account? create akun</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            <!-- Password input -->
+            <div class="form-outline mb-3">
+              <label class="form-label" for="form3Example4">Password</label>
+              <input
+                type="password"
+                id="password"
+                class="form-control form-control-lg"
+                placeholder="Enter password"
+                name="password"
+              />
             </div>
+
+            @if ($errors->any())
+						<div class="alert alert-danger">
+							@foreach ($errors->all() as $error)
+								<p>{{ $error }}</p>
+							@endforeach
+						</div>
+            @endif
+
+            <div class="text-center text-lg-start mt-4 pt-2">
+              <div class="card-body p-5 text-center">
+                <a href="dash.html">
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-lg"
+                    style="padding-left: 2.5rem; padding-right: 2.5rem"
+                  >
+                    Sign In
+                  </button>
+                </a>
+                <p class="small fw-bold mt-2 pt-1 mb-0">
+                  Don't have an account?
+                  <a href="/register" class="link-danger">Register</a>
+                </p>
+              </div>
+            </div>
+          </form>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
-</body>
 
-</html>
+@endsection
