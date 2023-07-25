@@ -23,4 +23,6 @@ Route::put('/barang/{barang}/update', [App\Http\Controllers\BarangController::cl
  
 
 Route::get('/login',[AuthController::class,'login']);
- Route::get('/register',[AuthController::class,'register']);
+Route::get('/register',[AuthController::class,'register']);
+Route::get('/profile',[AuthController::class,'profile']);
+

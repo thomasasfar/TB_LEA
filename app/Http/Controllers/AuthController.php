@@ -14,4 +14,8 @@ class AuthController extends Controller
     {
         return view('auth.create');
     }
+    public function profile()
+    {
+        return view("auth.profile");
+    }
 }
