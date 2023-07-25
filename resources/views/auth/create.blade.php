@@ -90,7 +90,7 @@
                                 <br>
                                 <br>
                                 <div>
-                                    <a href="/login">Sudah punya akun? login</a>
+                                    <a href="/login">Already have an account? Log-In</a>
                                 </div>
                             </div>
                         </form>
