@@ -143,6 +143,10 @@
                                 <input type="text" class="form-control" id="InputNama" name="nama_barang">
                             </div>
                             <div class="mb-3">
+                                <label for="InputNama" class="form-label">Harga</label>
+                                <input type="text" class="form-control" id="InputNama" name="harga">
+                            </div>
+                            <div class="mb-3">
                                 <label for="InputStatus">Status</label>
                                 <select class="form-select" id="status" aria-label="Default select example"
                                     name="status">
