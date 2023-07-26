@@ -1,7 +1,7 @@
 @extends('template')
 
 @section('title')
-    Barang
+    Profile
 @endsection
 
 @section('konten')
@@ -45,13 +45,13 @@
           <tbody>
             <tr>
               <td>1</td>
-              <td>Laptop</td>
+              <td>Tenda</td>
               <td>2023-07-25</td>
               <td>2023-07-28</td>
             </tr>
             <tr>
               <td>2</td>
-              <td>Proyektor</td>
+              <td>Sleeping Bag</td>
               <td>2023-07-26</td>
               <td>2023-07-27</td>
             </tr>
