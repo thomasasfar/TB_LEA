@@ -5,6 +5,7 @@
 @endsection
 
 @section('konten')
+@include('header')
     <main class="container">
 
         <h1 class="text-center mb-4">List Barang</h1>
@@ -25,6 +26,7 @@
                         <td>{{ $m->kode }}</td>
                         <td>{{ $m->nama_barang }}</td>
                         <td>{{ $m->status }}</td>
+                        @if(Auth::user()->role == 'admin')
                         <td>
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
@@ -106,15 +108,18 @@
                                 </div>
                             </div>
                         </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>
         </table>
 
+        @if(Auth::user()->role == 'admin')
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahBarang">
             Tambah Barang
         </button>
+
 
         <!-- Modal -->
         <div class="modal fade" id="modalTambahBarang" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -155,7 +160,7 @@
                 </div>
             </div>
         </div>
-
+        @endif
 
     </main>
 @endsection

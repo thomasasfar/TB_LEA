@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('kode')->unique();
             $table->string('nama_barang');
-            $table->string('status')->default('ada');
+            $table->string('status')->default('Tersedia');
+            $table->bigInteger('harga');
             $table->timestamps();
         });
     }
