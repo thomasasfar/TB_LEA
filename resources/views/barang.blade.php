@@ -15,6 +15,7 @@
                     <th scope="col">No</th>
                     <th scope="col">Kode</th>
                     <th scope="col">Nama</th>
+                    <th scope="col">Harga</th>
                     <th scope="col">Status</th>
                     <th scope="col">Aksi</th>
                 </tr>
@@ -25,6 +26,7 @@
                         <th scope="row">{{ $loop->iteration }}</th>
                         <td>{{ $m->kode }}</td>
                         <td>{{ $m->nama_barang }}</td>
+                        <td>{{ $m->harga}}</td>
                         <td>{{ $m->status }}</td>
                         @if(Auth::user()->role == 'admin')
                         <td>

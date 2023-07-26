@@ -40,6 +40,7 @@ class BarangController extends Controller
             'kode' => 'required',
             'nama_barang' => 'required',
             'status' => 'required',
+            'harga' => 'required',
         ]);
 
         Barang::create($validasi);
@@ -81,6 +82,7 @@ class BarangController extends Controller
             'kode' => $request->kode,
             'nama_barang' => $request->nama_barang,
             'status' => $request->status,
+            'harga' => $request->harga,
         ]);
 
         return redirect()->back();
