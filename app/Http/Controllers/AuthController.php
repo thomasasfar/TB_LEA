@@ -88,6 +88,6 @@ class AuthController extends Controller
         $user->no_hp = $request->input('no_hp');
 
         $user->save();
-        return redirect('profile')->with('succes', "Profile berhasil di-update");
+        return redirect('profile')->with('success', "Profile berhasil di-update");
     }
 }

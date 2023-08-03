@@ -29,7 +29,7 @@
                 <!-- Account details card-->
                 <div class="card mb-4">
                     <div class="card-header">Account Details</div>
-                    <div class="card-body">
+                    <div class="card-body personal-info">
                         @if (session('success'))
                             <div class="alert alert-success">
                                 {{ session('success') }}

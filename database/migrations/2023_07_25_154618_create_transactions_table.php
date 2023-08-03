@@ -18,7 +18,13 @@ return new class extends Migration
             $table->bigInteger('total_harga');
             $table->timestamps();
             $table->string('status');
-            
+            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_barang');
+        });
+
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_barang')->references('id')->on('barangs')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
