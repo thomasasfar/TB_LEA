@@ -6,7 +6,7 @@
         </a> --}}
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/krs" class="nav-link px-2 link-body-emphasis">Daftar Barang</a></li>
+          <li><a href="/barang" class="nav-link px-2 link-body-emphasis">Daftar Barang</a></li>
           {{-- <li><a href="/matkul" class="nav-link px-2 link-body-emphasis">Mata Kuliah</a></li>
           <li><a href="/mahasiswa" class="nav-link px-2 link-body-emphasis">Mahasiswa</a></li> --}}
         </ul>

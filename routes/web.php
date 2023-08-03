@@ -31,5 +31,6 @@ Route::post('/barang/tambah', [App\Http\Controllers\BarangController::class, 'st
 Route::delete('/barang/{barang}/hapus', [App\Http\Controllers\BarangController::class, 'destroy']);
 Route::put('/barang/{barang}/update', [App\Http\Controllers\BarangController::class, 'update']);
 
-//barang
+//profile
 Route::get('/profile', [App\Http\Controllers\AuthController::class, 'show'])->name('profile');
+Route::put('/profile/update', [App\Http\Controllers\AuthController::class, 'update'])->name('profile.update');

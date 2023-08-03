@@ -86,9 +86,13 @@
                                                         aria-describedby="emailHelp" name="kode">
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label value="{{ $m->nama_barang }}" for="InputNama" class="form-label">Nama</label>
-                                                    <input type="text" class="form-control" id="InputNama"
+                                                    <label for="InputNama" class="form-label">Nama</label>
+                                                    <input value="{{ $m->nama_barang }}" type="text" class="form-control" id="InputNama"
                                                         name="nama_barang">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="InputNama" class="form-label">Harga</label>
+                                                    <input value="{{ $m->harga }}" type="text" class="form-control" id="InputHarga" name="harga">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="InputStatus">Status</label>
@@ -146,7 +150,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="InputNama" class="form-label">Harga</label>
-                                <input type="text" class="form-control" id="InputNama" name="harga">
+                                <input type="text" class="form-control" id="InputHarga" name="harga">
                             </div>
                             <div class="mb-3">
                                 <label for="InputStatus">Status</label>

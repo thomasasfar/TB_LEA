@@ -71,4 +71,23 @@ class AuthController extends Controller
         $user = Auth::user();
         return view('profile.profile', compact('user'));
     }
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'nama' => 'required',
+            'username' => 'required',
+            'email' => 'required|email',
+            'no_hp' => 'required|numeric',
+        ]);
+
+        $user->nama = $request->input('nama');
+        $user->username = $request->input('username');
+        $user->email = $request->input('email');
+        $user->no_hp = $request->input('no_hp');
+
+        $user->save();
+        return redirect('profile')->with('succes', "Profile berhasil di-update");
+    }
 }
