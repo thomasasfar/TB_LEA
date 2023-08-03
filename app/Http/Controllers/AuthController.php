@@ -66,4 +66,9 @@ class AuthController extends Controller
         User::create($data);
         return redirect('login')->with('success', 'Registrasi Berhasil');
     }
+    public function show()
+    {
+        $user = Auth::user();
+        return view('profile.profile', compact('user'));
+    }
 }

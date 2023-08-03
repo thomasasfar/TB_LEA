@@ -30,3 +30,6 @@ Route::get('/barang', [App\Http\Controllers\BarangController::class, 'index']);
 Route::post('/barang/tambah', [App\Http\Controllers\BarangController::class, 'store']);
 Route::delete('/barang/{barang}/hapus', [App\Http\Controllers\BarangController::class, 'destroy']);
 Route::put('/barang/{barang}/update', [App\Http\Controllers\BarangController::class, 'update']);
+
+//barang
+Route::get('/profile', [App\Http\Controllers\AuthController::class, 'show'])->name('profile');
