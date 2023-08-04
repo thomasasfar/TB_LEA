@@ -19,7 +19,8 @@ class BarangSeeder extends Seeder
             'kode' => 'A001',
             'nama_barang' => 'Tenda',
             'status' => 'Tersedia',
-            'harga' => '120.000'
+            'harga' => '120.000',
+            
         ]);
     }
 }

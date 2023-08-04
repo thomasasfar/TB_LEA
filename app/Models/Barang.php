@@ -9,5 +9,9 @@ class Barang extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['kode', 'nama_barang', 'status', 'harga'];
+    protected $fillable = ['kode', 'nama_barang', 'status', 'harga', 'image'];
+
+    public function Transaction(){
+        return $this->hasMany(Transaction::class, "id_barang", "id");
+    }
 }

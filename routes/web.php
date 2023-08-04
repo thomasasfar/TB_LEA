@@ -27,7 +27,7 @@ Route::post('/auth/register', [App\Http\Controllers\AuthController::class, 'stor
 
 //barang
 Route::get('/barang', [App\Http\Controllers\BarangController::class, 'index']);
-Route::post('/barang/tambah', [App\Http\Controllers\BarangController::class, 'store']);
+Route::post('/barang/tambah', [App\Http\Controllers\BarangController::class, 'store'])->name('barang.store');
 Route::delete('/barang/{barang}/hapus', [App\Http\Controllers\BarangController::class, 'destroy']);
 Route::put('/barang/{barang}/update', [App\Http\Controllers\BarangController::class, 'update']);
 

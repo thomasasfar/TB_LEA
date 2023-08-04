@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('nama_barang');
             $table->string('status')->default('Tersedia');
             $table->bigInteger('harga');
+            $table->string('image');
             $table->timestamps();
         });
     }

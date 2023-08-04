@@ -41,10 +41,21 @@ class BarangController extends Controller
             'nama_barang' => 'required',
             'status' => 'required',
             'harga' => 'required',
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
         ]);
+
+        if($request->file('image')){
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $newName = $request->nama_barang.'-'.now()->timestamp.'.'.$extension;
+            $request->file('image')->storeAs('image', $newName, 'public');
+            $validasi['image'] = $newName;
+        } else {
+            $newName = ''; // Atau nilai default lainnya, sesuai kebutuhan Anda.
+        }
 
         Barang::create($validasi);
         return redirect()->back();
+
     }
 
     /**
@@ -83,7 +94,13 @@ class BarangController extends Controller
             'nama_barang' => $request->nama_barang,
             'status' => $request->status,
             'harga' => $request->harga,
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
         ]);
+
+        // $image_path = $request->file('image')->store('image', 'public');
+        // $data = Image::create([
+        //     'image' => $image_path,
+        // ]);
 
         return redirect()->back();
     }

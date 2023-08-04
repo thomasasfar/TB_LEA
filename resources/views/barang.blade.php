@@ -14,6 +14,7 @@
                 <tr>
                     <th scope="col">No</th>
                     <th scope="col">Kode</th>
+                    <th scope="col">Gambar</th>
                     <th scope="col">Nama</th>
                     <th scope="col">Harga</th>
                     <th scope="col">Status</th>
@@ -25,6 +26,14 @@
                     <tr>
                         <th scope="row">{{ $loop->iteration }}</th>
                         <td>{{ $m->kode }}</td>
+                        <td>
+                            @if ($m->image!='')
+                                <img src="{{ asset('storage/image/' . $m->image) }}" alt="Gambar Barang" style="max-width: 300px;">
+                            @else
+                                <!-- Tampilkan gambar placeholder jika tidak ada gambar yang diunggah -->
+                                <img src="{{ asset('storage/uploads/MYeLr7iAmrZIeQ57UC5l9IuihrqHMBNIVkYo834N.jpg') }}" alt="Gambar Placeholder" style="max-width: 100px;">
+                            @endif
+                        </td>
                         <td>{{ $m->nama_barang }}</td>
                         <td>{{ $m->harga}}</td>
                         <td>{{ $m->status }}</td>
@@ -86,6 +95,11 @@
                                                         aria-describedby="emailHelp" name="kode">
                                                 </div>
                                                 <div class="mb-3">
+                                                    <label for="InputGambar" class="form-label">Gambar</label>
+                                                    <input value="{{ $m->image }}" type="text" class="form-control" id="InputGambar"
+                                                        aria-describedby="emailHelp" name="image">
+                                                </div>
+                                                <div class="mb-3">
                                                     <label for="InputNama" class="form-label">Nama</label>
                                                     <input value="{{ $m->nama_barang }}" type="text" class="form-control" id="InputNama"
                                                         name="nama_barang">
@@ -137,12 +151,16 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" action="/barang/tambah">
+                        <form method="post" action="/barang/tambah" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
                                 <label for="InputKode" class="form-label">Kode</label>
                                 <input type="text" class="form-control" id="InputKode" aria-describedby="emailHelp"
                                     name="kode">
+                            </div>
+                            <div class="mb-3">
+                                <label for="InputGambar" class="form-label">Gambar</label>
+                                <input type="file" class="form-control" id="InputGambar" name="image">
                             </div>
                             <div class="mb-3">
                                 <label for="InputNama" class="form-label">Nama</label>
