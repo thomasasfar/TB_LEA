@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,19 +21,31 @@ use Illuminate\Support\Facades\Route;
 // });
 
 //login
-Route::get('/login', [App\Http\Controllers\AuthController::class, 'getLogin'])->name('login');
-Route::post('/auth/login', [App\Http\Controllers\AuthController::class, 'login']);
+Route::get('/login', [AuthController::class, 'getLogin'])->name('login');
+Route::post('/auth/login', [AuthController::class, 'login']);
 
 //register
-Route::get('/register', [App\Http\Controllers\AuthController::class, 'getRegister']);
-Route::post('/auth/register', [App\Http\Controllers\AuthController::class, 'store']);
+Route::get('/register', [AuthController::class, 'getRegister']);
+Route::post('/auth/register', [AuthController::class, 'store']);
+
+//logout
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //barang
-Route::get('/barang', [App\Http\Controllers\BarangController::class, 'index']);
-Route::post('/barang/tambah', [App\Http\Controllers\BarangController::class, 'store'])->name('barang.store');
-Route::delete('/barang/{barang}/hapus', [App\Http\Controllers\BarangController::class, 'destroy']);
-Route::put('/barang/{barang}/update', [App\Http\Controllers\BarangController::class, 'update']);
+Route::get('/barang', [BarangController::class, 'index']);
+Route::post('/barang/tambah', [BarangController::class, 'store'])->name('barang.store');
+Route::delete('/barang/{barang}/hapus', [BarangController::class, 'destroy']);
+Route::put('/barang/{barang}/update', [BarangController::class, 'update']);
 
 //profile
-Route::get('/profile', [App\Http\Controllers\AuthController::class, 'show'])->name('profile');
-Route::put('/profile/update', [App\Http\Controllers\AuthController::class, 'update'])->name('profile.update');
+Route::get('/profile', [AuthController::class, 'show'])->name('profile');
+Route::put('/profile/update', [AuthController::class, 'update'])->name('profile.update');
+
+//transactions
+Route::middleware(['admin'])->group(function(){
+    Route::get('/transactions', [TransactionController::class, 'index']);
+    Route::put('/transactions/{id_transaksi}/verify', [TransactionController::class, 'verify'])->name('transactions.verify');
+    //add transaction booking by admin
+    Route::get('/transaction/create', [TransactionController::class, 'create'])->name('transaction.create');
+    Route::post('/transaction/storeByAdmin', [TransactionController::class, 'storeByAdmin'])->name('transaction.storeByAdmin');
+});

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Barang;
+use Illuminate\Support\Facades\Storage;
 
 class BarangController extends Controller
 {
@@ -50,7 +51,7 @@ class BarangController extends Controller
             $request->file('image')->storeAs('image', $newName, 'public');
             $validasi['image'] = $newName;
         } else {
-            $newName = ''; // Atau nilai default lainnya, sesuai kebutuhan Anda.
+            $newName = '';
         }
 
         Barang::create($validasi);
@@ -87,20 +88,59 @@ class BarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Barang $barang )
+    public function update(Request $request, $id )
     {
-        $barang->update([
-            'kode' => $request->kode,
-            'nama_barang' => $request->nama_barang,
-            'status' => $request->status,
-            'harga' => $request->harga,
-            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+        // $barang->update([
+        //     'kode' => $request->kode,
+        //     'nama_barang' => $request->nama_barang,
+        //     'status' => $request->status,
+        //     'harga' => $request->harga,
+        //     'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+        // ]);
+
+        // if($request->hasFile('image')){
+        //     $extension = $request->file('image')->getClientOriginalExtension();
+        //     $newName = $request->nama_barang.'-'.now()->timestamp.'.'.$extension;
+        //     $request->file('image')->storeAs('image', $newName, 'public');
+        //     $validasi['image'] = $newName;
+        //     // Hapus gambar lama jika ada
+        //     if ($barang->image) {
+        //         Storage::disk('public')->delete('image/' . $barang->image);
+        //     }
+        // } else {
+        //     $validasi['image'] = $barang->image;
+        // }
+
+        // return redirect()->back();
+
+        $validasi = $request->validate([
+            'kode' => 'required',
+            'nama_barang' => 'required',
+            'status' => 'required',
+            'harga' => 'required',
+            'image' => 'sometimes|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
         ]);
 
-        // $image_path = $request->file('image')->store('image', 'public');
-        // $data = Image::create([
-        //     'image' => $image_path,
-        // ]);
+        // Ambil data barang berdasarkan ID
+        $barang = Barang::findOrFail($id);
+
+        // Jika ada gambar yang diunggah, simpan gambar baru
+        if ($request->hasFile('image')) {
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $newName = $request->nama_barang . '-' . now()->timestamp . '.' . $extension;
+            $request->file('image')->storeAs('image', $newName, 'public');
+            $validasi['image'] = $newName;
+
+            // Hapus gambar lama jika ada
+            if ($barang->image) {
+                Storage::disk('public')->delete('image/' . $barang->image);
+            }
+        } else {
+            $validasi['image'] = $barang->image; // Gunakan gambar lama jika tidak ada gambar baru
+        }
+
+        // Update data barang
+        $barang->update($validasi);
 
         return redirect()->back();
     }

@@ -90,4 +90,13 @@ class AuthController extends Controller
         $user->save();
         return redirect('profile')->with('success', "Profile berhasil di-update");
     }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login')->with('success', 'You have been logged out.');
+    }
 }

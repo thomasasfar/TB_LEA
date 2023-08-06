@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('status');
             $table->unsignedBigInteger('id_user');
             $table->unsignedBigInteger('id_barang');
+            $table->date('hari_ambil');
+            $table->date('hari_kembali');
+            $table->bigInteger('lama_peminjaman');
+            $table->string('pembayaran');
             $table->string('ktp');
             $table->timestamps();
         });
