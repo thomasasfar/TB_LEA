@@ -52,45 +52,81 @@ class TransactionController extends Controller
     public function storeByAdmin(Request $request)
     {
         $validated = $request->validate([
-            'nama' => 'required',
-            'kode_barang' => 'required',
+            'username' => 'required',
+            'kode' => 'required',
             'hari_ambil' => 'required|date',
             'hari_kembali' => 'required|date',
+            'ktp' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
         ]);
 
-        $barang = Barang::find($validated['id']);
+        $barang = Barang::find($validated['kode']);
 
         if ($barang) {
+            $hari_ambil = Carbon::parse($validated['hari_ambil'])->format('Y-m-d');
+            $hari_kembali = Carbon::parse($validated['hari_kembali'])->format('Y-m-d');
             $lama_peminjaman = Carbon::parse($validated['hari_ambil'])->diffInDays(Carbon::parse($validated['hari_kembali']));
             $total_harga = $lama_peminjaman * $barang->harga;
 
             $dataPinjaman = [
                 'id_user' => $validated['username'],
-                'id_barang' => $validated['id'],
-                'hari_ambil' => $validated['hari_ambil'],
-                'hari_kembali' => $validated['hari_kembali'],
+                'id_barang' => $validated['kode'],
+                // 'hari_ambil' => $validated['hari_ambil'],
+                // 'hari_kembali' => $validated['hari_kembali'],
+                'hari_ambil' => $hari_ambil,
+                'hari_kembali' => $hari_kembali,
                 'lama_peminjaman' => $lama_peminjaman,
                 'total_harga' => $total_harga,
                 'status' => 'verified',
                 'pembayaran' => 'lunas',
-                'ktp' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+                'ktp' => $validated['ktp']
             ];
 
             if ($request->file('ktp')) {
                 $extension = $request->file('ktp')->getClientOriginalExtension();
-                $newName = $request->nama_barang . '-' . now()->timestamp . '.' . $extension;
+                $newName = $request->username . '-' . now()->timestamp . '.' . $extension;
+                // $newName = $request->input('username') . '-' . now()->timestamp . '.' . $extension;
                 $request->file('ktp')->storeAs('ktp', $newName, 'public');
-                $validasi['ktp'] = $newName;
+                $dataPinjaman['ktp'] = $newName;
             } else {
-                $newName = '';
+                $dataPinjaman['ktp'] = '';
             }
 
             $barang->status = 'Tidak Tersedia';
             $barang->save();
-            Transaksi::create($dataPinjaman);
+            Transaction::create($dataPinjaman);
 
-            return redirect('transaction')->with('success', 'Peminjaman Berhasil Dilakukan!');
+            return redirect('transactions')->with('success', 'Peminjaman Berhasil Dilakukan!');
         }
+    }
+
+
+    public function verify(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required',
+        ]);
+
+        $transactions = Transaction::find($id);
+        $transactions->update($request->all());
+
+        if ($transactions->status == 'done') {
+            $barang = Barang::find($transactions->id);
+            if($barang){
+                $barang->update(['status' => 'Tersedia']);
+            }
+        }else{
+            $barang = Barang::find($transactions->id);
+            if($barang){
+            $barang->update(['status' => 'Tidak Tersedia']);
+            }
+        }
+
+        if($transactions->status == 'verified') {
+            $transactions->pembayaran = 'lunas';
+            $transactions->save();
+        }
+
+        return redirect()->back()->with('success', 'Transaksi berhasil diverifikasi');
     }
 
     /**
@@ -135,6 +171,18 @@ class TransactionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $transactions = Transaksi::findOrFail($id);
+        $rooms = Barang::find($transactions->id_barang);
+            if($rooms){
+                $rooms->update(['status' => 'Tersedia']);
+            }
+
+        $transactions->delete();
+
+        // if (Auth::user()->role == 'customer') {
+        //     // return redirect('booking')->with('success', 'Transaction deleted successfully');
+        // } elseif (Auth::user()->role == 'admin') {
+        //     return redirect('transactions')->with('success', 'Transaction deleted successfully');
+        // }
     }
 }

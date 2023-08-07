@@ -20,6 +20,6 @@ class Transaction extends Model
     }
 
     public function Barang(){
-        return $this->belongsTo(Kamar::class, "id_barang", "id");
+        return $this->belongsTo(Barang::class, "id_barang", "id");
     }
 }

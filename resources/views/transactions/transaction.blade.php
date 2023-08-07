@@ -8,17 +8,34 @@
     @include('header')
     <main class="container">
 
-        <h1 class="text-center mb-4">List Barang</h1>
+        <h1 class="text-center mb-4">List Transaksi</h1>
+
+        {{-- menampilkan alert msg --}}
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         {{-- Button Tambah --}}
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahBarang">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahTransaksi">
             Tambah Transaksi
         </button>
 
 
-        <!-- Modal -->
-        <div class="modal fade" id="modalTambahBarang" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- Modal Tambah Transaksi -->
+        <div class="modal fade" id="modalTambahTransaksi" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -26,7 +43,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" action="{{ route('transaction.storeByAdmin') }}">
+                        <form method="post" action="{{ route('transaction.storeByAdmin') }}" id="addFormTransaksi" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
                                 <label for="PilihUser" class="form-label">Customer</label>
@@ -39,20 +56,25 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <input type="hidden">
                             </div>
                             <div class="mb-3">
                                 <label for="PilihBarang" class="form-label">Product</label>
-                                <select class="form-select" aria-label="Default select example" name="id"
-                                    id="id" required>
+                                <select class="form-select" aria-label="Default select example" name="kode"
+                                    id="kode" required>
                                     <option selected>Pilih</option>
                                     @foreach ($barang as $b)
-                                        <option value="{{ $b->id }}">{{ $b->id }} | {{ $b->nama_barang }} -
-                                            Rp{{ $b->harga }}
-                                        </option>
+                                        @if ($b->status == 'Tersedia')
+                                            <option value="{{ $b->id }}">{{ $b->kode }} | {{ $b->nama_barang }}
+                                                -
+                                                Rp{{ $b->harga }}
+                                            </option>
+                                        @endif
                                     @endforeach
                                 </select>
-                                <input type="hidden">
+                                {{-- <div class="mb-3">
+                                    <label for="" class="form-label"></label>
+                                    <input type="hidden">
+                                </div> --}}
                             </div>
                             <div class="mb-3">
                                 <label for="PilihPengambilan" class="form-label">Tanggal Pengambilan</label>
@@ -63,8 +85,8 @@
                                 <input type="datetime-local" class="datetime" id="PilihPengembalian" name="hari_kembali">
                             </div>
                             <div class="mb-3">
-                                <label for="InputStatus">Status</label>
-                                <input type="file" class="form-control" id="InputGambar" name="ktp">
+                                <label for="UploadKTP" class="form-label">Upload KTP</label>
+                                <input type="file" class="form-control" id="UploadKTP" name="ktp">
                             </div>
                     </div>
                     <div class="modal-footer">
@@ -77,7 +99,7 @@
         </div>
 
 
-
+        {{-- Table --}}
         <table class="table table-striped">
             <thead>
                 <tr style="text-align: center">
@@ -106,9 +128,9 @@
                         <td>{{ $t->lama_peminjaman }} hari</td>
                         <td>Rp{{ $t->total_harga }}</td>
 
-                        @if ($t->pembayaran == 'Lunas')
+                        @if ($t->pembayaran == 'lunas')
                             <td style="color:green">Lunas</td>
-                        @elseif ($t->pembayaran == 'DP')
+                        @elseif ($t->pembayaran == 'dp')
                             <td style="color:orange">DP</td>
                         @endif
 
@@ -135,7 +157,7 @@
                             @endif
 
                             <!-- Modal Aksi-->
-                            <div class="modal fade" id="modalHapusBarang{{ $t->id }}" tabindex="-1"
+                            <div class="modal fade" id="modalVerify{{ $t->id }}" tabindex="-1"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -145,32 +167,32 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
-                                        <form action="{{ route('transactions.verify', $tr->id_transaksi) }}"
+                                        <form action="{{ route('transactions.verify', $t->id) }}"
                                             method="POST">
                                             @csrf
                                             @method('PUT')
                                             <div class="modal-body">
-                                                @if ($tr->status === 'booking' && $tr->pembayaran === 'paid')
+                                                @if ($t->status === 'booking' && $t->pembayaran === 'lunas')
                                                     <div class="mb-3">
                                                         <label for="editTipeKamar">Status</label>
                                                         <select class="form-select" id="verify" name="status">
                                                             <option selected>Pilih</option>
                                                             <option value="verified"
-                                                                {{ $tr->status == 'verified' ? 'selected' : '' }}>Verified
+                                                                {{ $t->status == 'verified' ? 'selected' : '' }}>Verified
                                                             </option>
                                                         </select>
                                                     </div>
-                                                @elseif ($tr->status === 'verified' && $tr->pembayaran === 'paid')
+                                                @elseif ($t->status === 'verified' && $t->pembayaran === 'lunas')
                                                     <div class="mb-3">
                                                         <label for="editTipeKamar">Status</label>
                                                         <select class="form-select" id="verify" name="status">
                                                             <option selected>Pilih</option>
-                                                            <option value="check in"
-                                                                {{ $tr->status == 'check in' ? 'selected' : '' }}>Check In
+                                                            <option value="done"
+                                                                {{ $t->status == 'done' ? 'selected' : '' }}>Done
                                                             </option>
                                                         </select>
                                                     </div>
-                                                @elseif ($tr->status === 'booking' && $tr->pembayaran === 'unpaid')
+                                                @elseif ($t->status === 'booking' && $t->pembayaran === 'dp')
                                                     <div class="mb-3">
                                                         <p class="fw-semibold" style="color: #13315C">Payment is made
                                                             offline at StayScape reception, proceed to confirm customer
@@ -181,7 +203,7 @@
                                                         <select class="form-select" id="verify" name="status">
                                                             <option selected>Pilih</option>
                                                             <option value="verified"
-                                                                {{ $tr->status == 'verified' ? 'selected' : '' }}>Verified
+                                                                {{ $t->status == 'verified' ? 'selected' : '' }}>Verified
                                                             </option>
                                                         </select>
                                                     </div>
@@ -191,7 +213,7 @@
                                                         <select class="form-select" id="verify" name="status">
                                                             <option selected>Pilih</option>
                                                             <option value="check out"
-                                                                {{ $tr->status == 'check out' ? 'selected' : '' }}>Check
+                                                                {{ $t->status == 'check out' ? 'selected' : '' }}>Check
                                                                 Out
                                                             </option>
                                                         </select>
@@ -206,76 +228,6 @@
                                     </div>
                                 </div>
                             </div>
-                            </div>
-
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                data-bs-target="#modalEditBarang{{ $m->id }}">
-                                <i>Edit</i>
-                            </button>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="modalEditBarang{{ $m->id }}" tabindex="-1"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Barang</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form method="post" action="/barang/{{ $m->id }}/update"
-                                                enctype="multipart/form-data">
-                                                @csrf
-                                                @method('put')
-                                                <div class="mb-3">
-                                                    <label for="InputKode" class="form-label">Kode</label>
-                                                    <input value="{{ $m->kode }}" type="text"
-                                                        class="form-control" id="InputKode" aria-describedby="emailHelp"
-                                                        name="kode">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="InputGambar" class="form-label">Gambar</label>
-                                                    <input value="{{ $m->image }}" type="file"
-                                                        class="form-control" id="InputGambar"
-                                                        aria-describedby="emailHelp" name="image">
-                                                    <img src="{{ asset('storage/image/' . $m->image) }}"
-                                                        alt="{{ $m->nama_barang }}" style="max-width: 200px;">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="InputNama" class="form-label">Nama</label>
-                                                    <input value="{{ $m->nama_barang }}" type="text"
-                                                        class="form-control" id="InputNama" name="nama_barang">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="InputNama" class="form-label">Harga</label>
-                                                    <input value="{{ $m->harga }}" type="text"
-                                                        class="form-control" id="InputHarga" name="harga">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="InputStatus">Status</label>
-                                                    <select value="{{ $m->status }}" class="form-select"
-                                                        id="status" aria-label="Default select example"
-                                                        name="status">
-                                                        <option selected>Pilih</option>
-                                                        <option value="Tersedia"
-                                                            {{ $m->status == 'Tersedia' ? 'selected' : '' }}>Tersedia
-                                                        </option>
-                                                        <option value="Tidak Tersedia"
-                                                            {{ $m->status == 'Tidak Tersedia' ? 'selected' : '' }}>
-                                                            Tidak Tersedia</option>
-                                                    </select>
-                                                </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Tutup</button>
-                                            <button type="submit" class="btn btn-primary">Edit</button>
-                                        </div>
-                                        </form>
-                                    </div>
-                                </div>
                             </div>
                         </td>
 
