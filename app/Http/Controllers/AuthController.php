@@ -26,7 +26,11 @@ class AuthController extends Controller
         //cek apakah login valid
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
-            return redirect()->intended('/barang');
+            if (Auth::user()->role == 'admin') {
+                return redirect()->intended('/barang'); // Redirect admin ke halaman barang
+            } else {
+                return redirect()->intended('/katalog'); // Redirect user ke halaman katalog
+            }
         }
         return back()->withErrors([
             'email' => 'Username atau Password Salah',
@@ -137,9 +141,9 @@ class AuthController extends Controller
     {
         $user = Auth::user(); // Mendapatkan informasi user yang sedang login
         $newPassword = $request->input('new_password');
-    
+
         $user->changePassword($newPassword);
-    
+
         return redirect()->back()->with('success', 'Password berhasil diubah!');
     }
 }

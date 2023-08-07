@@ -32,10 +32,6 @@ Route::post('/auth/register', [AuthController::class, 'store']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //barang
-Route::get('/barang', [BarangController::class, 'index']);
-Route::post('/barang/tambah', [BarangController::class, 'store'])->name('barang.store');
-Route::delete('/barang/{barang}/hapus', [BarangController::class, 'destroy']);
-Route::put('/barang/{barang}/update', [BarangController::class, 'update']);
 Route::get('/katalog', [BarangController::class, 'katalog']);
 
 
@@ -48,8 +44,14 @@ Route::put('profile/updatephoto', [AuthController::class, 'updatePhoto'])->name(
 Route::get('/password', [AuthController::class, 'change'])->name('password');
 Route::put('/password/update', [AuthController::class, 'changePassword'])->name('password.update');
 
-//transactions
+//Middleware Admin
 Route::middleware(['admin'])->group(function(){
+    //barang
+    Route::get('/barang', [BarangController::class, 'index']);
+    Route::post('/barang/tambah', [BarangController::class, 'store'])->name('barang.store');
+    Route::delete('/barang/{barang}/hapus', [BarangController::class, 'destroy']);
+    Route::put('/barang/{barang}/update', [BarangController::class, 'update']);
+    //transaksi
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::put('/transactions/{id_transaksi}/verify', [TransactionController::class, 'verify'])->name('transactions.verify');
     //add transaction booking by admin

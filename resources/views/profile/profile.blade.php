@@ -14,11 +14,14 @@
                 <div class="card mb-4 mb-xl-0">
                     <div class="card-header">Profile Picture</div>
                     <div class="card-body text-center">
-                        <form action="{{route('profile.updatePhoto')}}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <input type="file" name="image">
-                            <input type="submit" value="Upload">
-                        </form>
+                        <!-- Profile picture image-->
+                        {{-- <img class="img-account-profile rounded-circle mb-2"
+                            src="https://happytravel.viajes/wp-content/uploads/2020/04/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
+                            style="max-width: 300px" alt="..."> --}}
+                        <img src="{{ asset('storage/photo/' . $user->photo) }}"
+                            class="img-account-profile rounded-circle mb-2" alt="Gambar Barang" style="max-width: 300px;">
+                        <!-- Profile picture upload button-->
+                        <button class="btn btn-dark" type="button">Change Image</button>
                     </div>
                 </div>
             </div>
@@ -54,8 +57,8 @@
                                 </div>
                                 <div class="mb-1">
                                     <label class="small mb-1" for="inputUsername">Username</label>
-                                    <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username"
-                                        value="{{ $user->username }}" name="username">
+                                    <input class="form-control" id="inputUsername" type="text"
+                                        placeholder="Enter your username" value="{{ $user->username }}" name="username">
                                 </div>
                                 <!-- Form Group (email address)-->
                                 <div class="mb-1">
@@ -64,12 +67,11 @@
                                         placeholder="Enter your email address" value="{{ $user->email }}" name="email">
                                 </div>
                                 <!-- Form Row-->
-                                    <div class="mb-3">
-                                        <label class="small mb-1" for="inputPhone">Phone number</label>
-                                        <input class="form-control" id="inputPhone" type="tel"
-                                            placeholder="Enter your phone number" value="{{ $user->no_hp }}"
-                                            name="no_hp">
-                                    </div>
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="inputPhone">Phone number</label>
+                                    <input class="form-control" id="inputPhone" type="tel"
+                                        placeholder="Enter your phone number" value="{{ $user->no_hp }}" name="no_hp">
+                                </div>
                                 <!-- Save changes button-->
                                 <button class="btn btn-primary" type="submit">Save changes</button>
                                 <br></br>
