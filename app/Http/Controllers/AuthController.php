@@ -128,4 +128,18 @@ class AuthController extends Controller
 
         return redirect('/login')->with('success', 'You have been logged out.');
     }
+    public function change()
+    {
+        $user = Auth::user();
+        return view('profile.password', compact('user'));
+    }
+    public function changePassword(Request $request)
+    {
+        $user = Auth::user(); // Mendapatkan informasi user yang sedang login
+        $newPassword = $request->input('new_password');
+    
+        $user->changePassword($newPassword);
+    
+        return redirect()->back()->with('success', 'Password berhasil diubah!');
+    }
 }

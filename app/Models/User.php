@@ -49,4 +49,11 @@ class User extends Authenticatable
     public function Transaction(){
         return $this->hasMany(Transaction::class, "id_user", "id");
     }
+
+    public function changePassword($newPassword)
+{
+    $this->password = bcrypt($newPassword);
+    $this->save();
+}
+
 }

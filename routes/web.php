@@ -44,6 +44,10 @@ Route::get('/profile', [AuthController::class, 'show'])->name('profile');
 Route::put('/profile/update', [AuthController::class, 'update'])->name('profile.update');
 Route::put('profile/updatephoto', [AuthController::class, 'updatePhoto'])->name('profile.updatePhoto');
 
+//password
+Route::get('/password', [AuthController::class, 'change'])->name('password');
+Route::put('/password/update', [AuthController::class, 'changePassword'])->name('password.update');
+
 //transactions
 Route::middleware(['admin'])->group(function(){
     Route::get('/transactions', [TransactionController::class, 'index']);
