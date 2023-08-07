@@ -22,7 +22,7 @@
                         class="rounded-circle">
                 </a>
                 <ul class="dropdown-menu text-small">
-                    <li><a class="dropdown-item" href="/password">Settings</a></li>
+                    <li><a class="dropdown-item" href="/password">Change Password</a></li>
                     <li><a class="dropdown-item" href="/profile">Profile</a></li>
                     <li>
                         <hr class="dropdown-divider">
