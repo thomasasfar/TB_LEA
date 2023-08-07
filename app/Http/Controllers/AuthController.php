@@ -139,11 +139,22 @@ class AuthController extends Controller
     }
     public function changePassword(Request $request)
     {
-        $user = Auth::user(); // Mendapatkan informasi user yang sedang login
-        $newPassword = $request->input('new_password');
-
-        $user->changePassword($newPassword);
-
-        return redirect()->back()->with('success', 'Password berhasil diubah!');
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
+        ]);
+    
+        $user = Auth::user();
+    
+        if (Hash::check($request->current_password, $user->password)) {
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+    
+            return redirect('/profile/update')->with('success', 'Password berhasil diubah.');
+        } else {
+            return redirect()->back()->with('error', 'Password saat ini tidak cocok.');
+        }
     }
+
+        
 }
