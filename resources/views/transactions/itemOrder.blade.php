@@ -91,39 +91,50 @@
     </style>
 
     <div class='container'>
-        <div class="card mx-auto col-md-5 col-8 mt-3 p-0">
-            @if ($barang->image != '')
-                <img src="{{ asset('storage/image/' . $barang->image) }}" alt="Gambar Barang" class="mx-auto pic">
-            @else
-                <!-- Tampilkan gambar placeholder jika tidak ada gambar yang diunggah -->
-                <img src="{{ asset('storage/uploads/Sepatu-1691163151.png') }}" alt="Gambar Placeholder"
-                    style="max-width: 100px;">
-            @endif
-            {{-- <img class='mx-auto pic'
+        <form action="{{ route('order.add', $barang->id) }}" method="post">
+            @csrf
+            <input type="hidden" name="id_barang" value="{{ $barang->id }}">
+            <div class="card mx-auto col-md-5 col-8 mt-3 p-0">
+                @if ($barang->image != '')
+                    <img src="{{ asset('storage/image/' . $barang->image) }}" alt="Gambar Barang" class="mx-auto pic">
+                @else
+                    <!-- Tampilkan gambar placeholder jika tidak ada gambar yang diunggah -->
+                    <img src="{{ asset('storage/uploads/Sepatu-1691163151.png') }}" alt="Gambar Placeholder"
+                        style="max-width: 100px;">
+                @endif
+                {{-- <img class='mx-auto pic'
             src="https://i.imgur.com/kXUgBQZ.jpg"/> --}}
-            <div class="card-title d-flex px-4">
-                <h4 class="item text-muted">{{ $barang->nama_barang }}</h4>
-                <p>Rp{{ $barang->harga }}/<i class="text text-primary">hari</i></p>
-            </div>
-            <div class="card-body">
-                <h6 class="text-muted">Detail Peminjaman</h6>
-                <div class="numbr mb-3">
-                    <i class=" col-1 fas fa-credit-card text-muted p-0">Tanggal Pengambilan</i>
-                    <input type="date"
-                        style="margin-left: 58px; border-radius:8px; width: 200px" name="hari_ambil" required>
+                <div class="card-title d-flex px-4">
+                    <h4 class="item text-muted">{{ $barang->nama_barang }}</h4>
+                    <p>Rp{{ $barang->harga }}/<i class="text text-primary">hari</i></p>
                 </div>
-                <div class="line2 col-lg-12 col-12 mb-4">
-                    <i class=" col-1 fas fa-credit-card text-muted p-0">Tanggal Pengembalian</i>
-                    <input type="date"
-                        style="margin-left: 50px; border-radius:8px; width: 200px" name="hari_kembali" required>
+                <div class="card-body">
+                    <h6 class="text-muted">Detail Peminjaman</h6>
+                    <div class="numbr mb-3">
+                        <i class=" col-1 fas fa-credit-card text-muted p-0">Tanggal Pengambilan</i>
+                        <input type="date" style="margin-left: 58px; border-radius:8px; width: 200px" name="hari_ambil"
+                            required>
+                    </div>
+                    <div class="line2 col-lg-12 col-12 mb-4">
+                        <i class=" col-1 fas fa-credit-card text-muted p-0">Tanggal Pengembalian</i>
+                        <input type="date" style="margin-left: 50px; border-radius:8px; width: 200px" name="hari_kembali"
+                            required>
+                    </div>
+                </div>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <div class="text-center p-0">
+                    <button type="submit" class="btn btn-success col-lg-12 col-12 mb-3">Booking</button>
                 </div>
             </div>
-            <div class="footer text-center p-0">
-                <div class="col-lg-12 col-12 p-0">
-                    <p class="order">Booking</p>
-                </div>
-            </div>
-        </div>
 
+        </form>
     </div>
 @endsection

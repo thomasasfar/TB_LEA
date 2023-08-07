@@ -59,5 +59,9 @@ Route::middleware(['admin'])->group(function(){
     Route::post('/transaction/storeByAdmin', [TransactionController::class, 'storeByAdmin'])->name('transaction.storeByAdmin');
 });
 
+// Middleware Customer
+// Route::middleware(['customer'])->group(function(){
 //transactions customer
 Route::get('/order/add/{id}', [TransactionController::class, 'showItem'])->name('order.showItem');
+Route::post('/order/add', [TransactionController::class, 'bookingByUser'])->name('order.add')->middleware(('auth.user'));
+// });

@@ -6,9 +6,14 @@
         </a> --}}
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                @if (Auth::user()->role == 'admin')
                 <li><a href="/barang" class="nav-link px-2 link-body-emphasis">Daftar Barang</a></li>
-                {{-- <li><a href="/matkul" class="nav-link px-2 link-body-emphasis">Mata Kuliah</a></li> --}}
                 <li><a href="/transactions" class="nav-link px-2 link-body-emphasis">Transaksi</a></li>
+                @elseif (Auth::user()->role == 'customer')
+                <li><a href="/katalog" class="nav-link px-2 link-body-emphasis">Daftar Barang</a></li>
+                
+                @endif
+
             </ul>
 
             <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">

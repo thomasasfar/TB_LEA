@@ -44,9 +44,42 @@ class TransactionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function bookingByUser(Request $request)
     {
-        //
+        $validasi = $request->validate([
+            'id_barang'=> 'required',
+            'hari_ambil' => 'required|date',
+            'hari_kembali' => 'required|date',
+        ]);
+
+        $barang = Barang::find($request->id);
+
+        if (!$barang) {
+            return redirect()->back()->with('error', 'Kode barang invalid');
+        }
+
+        $hari_ambil = Carbon::parse($validasi['hari_ambil'])->format('Y-m-d');
+        $hari_kembali = Carbon::parse($validasi['hari_kembali'])->format('Y-m-d');
+        $lama_peminjaman = Carbon::parse($validasi['hari_ambil'])->diffInDays(Carbon::parse($validasi['hari_kembali']));
+        $total_harga = $lama_peminjaman * $barang->harga;
+
+        $dataPinjaman = [
+            'id_user' => Auth::id(),
+            'id_barang' => $barang->id,
+            'hari_ambil' => $hari_ambil,
+            'hari_kembali' => $hari_kembali,
+            'lama_peminjaman' => $lama_peminjaman,
+            'total_harga' => $total_harga,
+            'status' => 'booking',
+            'pembayaran' => 'dp',
+            'ktp' =>'3-1691326638.png'
+        ];
+
+        $barang->status = 'Tidak Tersedia';
+        $barang->save();
+        Transaction::create($dataPinjaman);
+
+        return redirect('katalog')->with('success', 'Peminjaman Berhasil Dilakukan!');
     }
 
     public function storeByAdmin(Request $request)
@@ -172,10 +205,10 @@ class TransactionController extends Controller
      */
     public function destroy($id)
     {
-        $transactions = Transaksi::findOrFail($id);
-        $rooms = Barang::find($transactions->id_barang);
-            if($rooms){
-                $rooms->update(['status' => 'Tersedia']);
+        $transactions = Transaction::findOrFail($id);
+        $barang = Barang::find($transactions->id_barang);
+            if($barang){
+                $barang->update(['status' => 'Tersedia']);
             }
 
         $transactions->delete();
