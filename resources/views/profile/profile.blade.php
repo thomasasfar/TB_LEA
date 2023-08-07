@@ -78,7 +78,7 @@
                                 <br></br>
                                 <!-- Change Password-->
                                 <div class="col-md-6">
-                                    <p><a href="/profile/password">Change Password?</a></p>
+                                    <p><a href="/password">Change Password?</a></p>
                                 </div>
                         </form>
                     </div>
