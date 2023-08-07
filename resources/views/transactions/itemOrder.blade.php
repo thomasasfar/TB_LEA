@@ -8,12 +8,12 @@
     @include('header')
 
     <style>
-        .container {
+        .container-ko {
             margin-top: 40px;
             margin-bottom: 40px;
         }
 
-        img {
+        .mbar {
             width: 100%;
         }
 
@@ -90,20 +90,18 @@
         }
     </style>
 
-    <div class='container'>
+    <div class='container-ko'>
         <form action="{{ route('order.add', $barang->id) }}" method="post">
             @csrf
             <input type="hidden" name="id_barang" value="{{ $barang->id }}">
             <div class="card mx-auto col-md-5 col-8 mt-3 p-0">
                 @if ($barang->image != '')
-                    <img src="{{ asset('storage/image/' . $barang->image) }}" alt="Gambar Barang" class="mx-auto pic">
+                    <img src="{{ asset('storage/image/' . $barang->image) }}" alt="Gambar Barang" class="mx-auto pic mbar">
                 @else
                     <!-- Tampilkan gambar placeholder jika tidak ada gambar yang diunggah -->
-                    <img src="{{ asset('storage/uploads/Sepatu-1691163151.png') }}" alt="Gambar Placeholder"
+                    <img src="{{ asset('storage/uploads/Sepatu-1691163151.png') }}" alt="Gambar Placeholder" class="mbar"
                         style="max-width: 100px;">
                 @endif
-                {{-- <img class='mx-auto pic'
-            src="https://i.imgur.com/kXUgBQZ.jpg"/> --}}
                 <div class="card-title d-flex px-4">
                     <h4 class="item text-muted">{{ $barang->nama_barang }}</h4>
                     <p>Rp{{ $barang->harga }}/<i class="text text-primary">hari</i></p>
@@ -131,7 +129,7 @@
                     </div>
                 @endif
                 <div class="text-center p-0">
-                    <button type="submit" class="btn btn-success col-lg-12 col-12 mb-3">Booking</button>
+                    <button type="submit" class="btn btn-success col-lg-12 col-12">Booking</button>
                 </div>
             </div>
 

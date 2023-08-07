@@ -47,12 +47,12 @@ class TransactionController extends Controller
     public function bookingByUser(Request $request)
     {
         $validasi = $request->validate([
-            'id_barang'=> 'required',
+            'id_barang'=> 'required|exists:barangs,id',
             'hari_ambil' => 'required|date',
             'hari_kembali' => 'required|date',
         ]);
 
-        $barang = Barang::find($request->id);
+        $barang = Barang::find($validasi['id_barang']);
 
         if (!$barang) {
             return redirect()->back()->with('error', 'Kode barang invalid');
@@ -169,9 +169,12 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $id_user = Auth::user();
+        $user = User::find('id');
+        $kamar = Barang::all();
+        return view('transaction.booking', compact('user', 'barang'));
     }
 
     /**
