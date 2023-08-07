@@ -90,6 +90,35 @@ class AuthController extends Controller
         $user->save();
         return redirect('profile')->with('success', "Profile berhasil di-update");
     }
+
+    public function updatePhoto(Request $request)
+    {
+        $user = Auth::user();
+
+        $photoprofile = $request->validate([
+            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+        ]);
+
+        if ($request->hasFile('photo')) {
+            $extension = $request->file('photo')->getClientOriginalExtension();
+            $newName = $user->username . '-' . now()->timestamp . '.' . $extension;
+            $request->file('photo')->storeAs('photo', $newName, 'public');
+            $photoprofile['photo'] = $newName;
+
+            // Hapus gambar lama jika ada
+            if ($user->photo) {
+                Storage::disk('public')->delete('photo/' . $user->photo);
+            }
+        } else {
+            $photoprofile['photo'] = $user->photo; // Gunakan gambar lama jika tidak ada gambar baru
+        }
+
+        $user->update($photoprofile);
+
+        return redirect()->back();
+
+    }
+
     public function logout(Request $request)
     {
         Auth::logout();

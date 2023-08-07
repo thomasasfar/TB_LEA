@@ -60,6 +60,7 @@ class TransactionController extends Controller
         ]);
 
         $barang = Barang::find($validated['kode']);
+        $user = User::find($validated['username']);
 
         if ($barang) {
             $hari_ambil = Carbon::parse($validated['hari_ambil'])->format('Y-m-d');
@@ -83,7 +84,7 @@ class TransactionController extends Controller
 
             if ($request->file('ktp')) {
                 $extension = $request->file('ktp')->getClientOriginalExtension();
-                $newName = $request->username . '-' . now()->timestamp . '.' . $extension;
+                $newName = $user->username . '-' . now()->timestamp . '.' . $extension;
                 // $newName = $request->input('username') . '-' . now()->timestamp . '.' . $extension;
                 $request->file('ktp')->storeAs('ktp', $newName, 'public');
                 $dataPinjaman['ktp'] = $newName;
@@ -184,5 +185,11 @@ class TransactionController extends Controller
         // } elseif (Auth::user()->role == 'admin') {
         //     return redirect('transactions')->with('success', 'Transaction deleted successfully');
         // }
+    }
+
+    public function showItem($id)
+    {
+        $barang = Barang::findOrFail($id);
+        return view('transactions.itemOrder', compact('barang'));
     }
 }

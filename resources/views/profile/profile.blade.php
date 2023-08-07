@@ -14,14 +14,11 @@
                 <div class="card mb-4 mb-xl-0">
                     <div class="card-header">Profile Picture</div>
                     <div class="card-body text-center">
-                        <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2"
-                            src="https://happytravel.viajes/wp-content/uploads/2020/04/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
-                            style="max-width: 300px" alt="...">
-                        <!-- Profile picture help block-->
-                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                        <!-- Profile picture upload button-->
-                        <button class="btn btn-primary" type="button">Upload new image</button>
+                        <form action="{{route('profile.updatePhoto')}}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="image">
+                            <input type="submit" value="Upload">
+                        </form>
                     </div>
                 </div>
             </div>

@@ -36,10 +36,13 @@ Route::get('/barang', [BarangController::class, 'index']);
 Route::post('/barang/tambah', [BarangController::class, 'store'])->name('barang.store');
 Route::delete('/barang/{barang}/hapus', [BarangController::class, 'destroy']);
 Route::put('/barang/{barang}/update', [BarangController::class, 'update']);
+Route::get('/katalog', [BarangController::class, 'katalog']);
+
 
 //profile
 Route::get('/profile', [AuthController::class, 'show'])->name('profile');
 Route::put('/profile/update', [AuthController::class, 'update'])->name('profile.update');
+Route::put('profile/updatephoto', [AuthController::class, 'updatePhoto'])->name('profile.updatePhoto');
 
 //transactions
 Route::middleware(['admin'])->group(function(){
@@ -49,3 +52,6 @@ Route::middleware(['admin'])->group(function(){
     Route::get('/transaction/create', [TransactionController::class, 'create'])->name('transaction.create');
     Route::post('/transaction/storeByAdmin', [TransactionController::class, 'storeByAdmin'])->name('transaction.storeByAdmin');
 });
+
+//transactions customer
+Route::get('/order/add/{id}', [TransactionController::class, 'showItem'])->name('order.showItem');

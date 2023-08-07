@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('no_hp')->unique();
             $table->string('role');
+            $table->string('photo')->default('profile.default.png');
             $table->timestamps();
         });
     }

@@ -16,7 +16,7 @@ class BarangController extends Controller
     public function index()
     {
         $barang = Barang::all();
-        return view('barang', compact('barang'));
+        return view('barang.barang', compact('barang'));
     }
 
     /**
@@ -117,10 +117,10 @@ class BarangController extends Controller
             'kode' => 'required',
             'nama_barang' => 'required',
             'status' => 'required',
-            'harga' => 'required',
+            'harga' => 'required|numeric',
             'image' => 'sometimes|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
         ]);
-
+        $validasi['harga'] = number_format($validasi['harga'], 0, ',', '.');
         // Ambil data barang berdasarkan ID
         $barang = Barang::findOrFail($id);
 
@@ -155,5 +155,15 @@ class BarangController extends Controller
     {
         $barang->delete();
         return redirect()->back();
+    }
+
+    public function katalog(){
+        $barang = Barang::all();
+        return view('barang.katalog', compact('barang'));
+
+        if (isset($results)) {
+            // Tampilkan hasil pencarian
+            return view('room.katalog', ['results' => $results]);
+        }
     }
 }

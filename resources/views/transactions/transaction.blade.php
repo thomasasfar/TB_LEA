@@ -1,7 +1,7 @@
 @extends('template')
 
 @section('title')
-    Barang
+    Transaction
 @endsection
 
 @section('konten')
@@ -78,11 +78,11 @@
                             </div>
                             <div class="mb-3">
                                 <label for="PilihPengambilan" class="form-label">Tanggal Pengambilan</label>
-                                <input type="datetime-local" class="datetime" id="PilihPengambilan" name="hari_ambil">
+                                <input type="date" id="PilihPengambilan" name="hari_ambil">
                             </div>
                             <div class="mb-3">
                                 <label for="PilihPengembalian" class="form-label">Tanggal Pengembalian</label>
-                                <input type="datetime-local" class="datetime" id="PilihPengembalian" name="hari_kembali">
+                                <input type="date" id="PilihPengembalian" name="hari_kembali">
                             </div>
                             <div class="mb-3">
                                 <label for="UploadKTP" class="form-label">Upload KTP</label>
