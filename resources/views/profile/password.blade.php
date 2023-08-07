@@ -18,7 +18,7 @@
                             <div class="alert alert-success">{{ session('success') }}</div>
                         @endif
 
-                        <form method="POST" action="{{ route('/password/update') }}">
+                        <form method="POST" action="/password/update">
                             @csrf
                             @method('PUT')
 
