@@ -72,7 +72,7 @@ class TransactionController extends Controller
             'total_harga' => $total_harga,
             'status' => 'booking',
             'pembayaran' => 'dp',
-            'ktp' =>'3-1691326638.png'
+            // 'ktp' =>'3-1691326638.png'
         ];
 
         $barang->status = 'Tidak Tersedia';
@@ -138,30 +138,78 @@ class TransactionController extends Controller
     {
         $request->validate([
             'status' => 'required',
+            'ktp' => 'required_if:status,verified|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
         ]);
 
         $transactions = Transaction::find($id);
+        $user = User::find($transactions->id_user);
         $transactions->update($request->all());
 
         if ($transactions->status == 'done') {
-            $barang = Barang::find($transactions->id);
+            $barang = Barang::find($transactions->id_barang);
             if($barang){
                 $barang->update(['status' => 'Tersedia']);
             }
         }else{
-            $barang = Barang::find($transactions->id);
+            $barang = Barang::find($transactions->id_barang);
             if($barang){
             $barang->update(['status' => 'Tidak Tersedia']);
             }
         }
 
         if($transactions->status == 'verified') {
+            if (!$request->hasFile('ktp')) {
+                return redirect()->back()->with('error', 'Anda harus mengunggah KTP untuk verifikasi');
+            }
+
+            $ktpExtension = $request->file('ktp')->getClientOriginalExtension();
+        $ktpFilename = $user->username . '-' . now()->timestamp . '.' . $ktpExtension;
+        $request->file('ktp')->storeAs('ktp', $ktpFilename, 'public');
+        $transactions->ktp = $ktpFilename;
+
             $transactions->pembayaran = 'lunas';
             $transactions->save();
         }
 
         return redirect()->back()->with('success', 'Transaksi berhasil diverifikasi');
     }
+
+    public function verifyBooking(Request $request, $id)
+    {
+        $verifikasi = $request->validate([
+            'ktp' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        ]);
+
+        $transactions = Transaction::findOrFail($id);
+
+        if ($request->hasFile('ktp')) {
+            $extension = $request->file('ktp')->getClientOriginalExtension();
+            $newName = Auth::user()->username . '-' . now()->timestamp . '.' . $extension;
+            $request->file('ktp')->storeAs('ktp', $newName, 'public');
+
+             // Simpan nama file gambar ke kolom ktp
+            $transactions->ktp = $newName;
+        }
+
+        $transactions->status = 'pending';
+
+        $transactions->pembayaran = 'lunas';
+        $transactions->save();
+
+        return redirect('katalog')->with('success', 'Orderan anda akan segera diverifikasi admin');
+    }
+
+    public function verifyTransaction($id)
+    {
+    $transaksi = Transaction::findOrFail($id);
+
+    // Ubah status transaksi menjadi "verifikasi"
+    $transaksi->status = 'verifikasi';
+    $transaksi->save();
+
+    return redirect('transactions')->with('success', 'Status transaksi berhasil diubah menjadi verifikasi.');
+    }
+
 
     /**
      * Display the specified resource.
@@ -172,10 +220,24 @@ class TransactionController extends Controller
     public function show()
     {
         $id_user = Auth::user();
+        $transactions = Transaction::where('id_user', $id_user->id)
+            ->get();
         $user = User::find('id');
-        $kamar = Barang::all();
-        return view('transaction.booking', compact('user', 'barang'));
+        $barang = Barang::all();
+        return view('transactions.riwayat', compact('user', 'barang','transactions'));
     }
+
+    public function showBook()
+    {
+        $id_user = Auth::user();
+        $transactions = Transaction::where('id_user', $id_user->id)
+            ->whereIn('status', ['booking', 'pending'])
+            ->get();
+        $user = User::find($id_user->id);
+        $barang = Barang::all();
+        return view('transactions.booking', compact('user', 'barang', 'transactions'));
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -197,7 +259,35 @@ class TransactionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validasi = $request->validate([
+            'kode' => 'required',
+            'hari_ambil' => 'required',
+            'hari_kembali' => 'required',
+        ]);
+
+        $transactions = Transaction::findOrFail($id);
+
+        $barang = Barang::find($validasi['kode']);
+
+        $hari_ambil = Carbon::parse($validated['hari_ambil'])->format('Y-m-d');
+        $hari_kembali = Carbon::parse($validated['hari_kembali'])->format('Y-m-d');
+        $lama_peminjaman = Carbon::parse($validated['hari_ambil'])->diffInDays(Carbon::parse($validated['hari_kembali']));
+        $total_harga = $lama_peminjaman * $barang->harga;
+
+        $updatePinjaman = [
+            'id_barang' => $validasi['kode'],
+            'hari_ambil' => $hari_ambil,
+            'hari_kembali' => $hari_kembali,
+            'lama_peminjaman' => $lama_peminjaman,
+            'total_harga' => $total_harga,
+        ];
+
+        $transactions->update($updatePinjaman);
+        $barang->statu = 'Tidak Tersedia';
+        $barang->save();
+
+        return redirect('transactions')->with('success', 'Booking berhasil diupdate');
+
     }
 
     /**
@@ -216,11 +306,8 @@ class TransactionController extends Controller
 
         $transactions->delete();
 
-        // if (Auth::user()->role == 'customer') {
-        //     // return redirect('booking')->with('success', 'Transaction deleted successfully');
-        // } elseif (Auth::user()->role == 'admin') {
-        //     return redirect('transactions')->with('success', 'Transaction deleted successfully');
-        // }
+        return redirect('transactions')->with('success', 'Transaction deleted successfully');
+
     }
 
     public function showItem($id)

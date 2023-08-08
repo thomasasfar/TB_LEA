@@ -53,15 +53,26 @@ Route::middleware(['admin'])->group(function(){
     Route::put('/barang/{barang}/update', [BarangController::class, 'update']);
     //transaksi
     Route::get('/transactions', [TransactionController::class, 'index']);
-    Route::put('/transactions/{id_transaksi}/verify', [TransactionController::class, 'verify'])->name('transactions.verify');
+    Route::put('/transactions/{id}/verify', [TransactionController::class, 'verify'])->name('transactions.verify');
     //add transaction booking by admin
     Route::get('/transaction/create', [TransactionController::class, 'create'])->name('transaction.create');
     Route::post('/transaction/storeByAdmin', [TransactionController::class, 'storeByAdmin'])->name('transaction.storeByAdmin');
+    //edit transaction booking by admin
+    Route::put('/booking/{id}', [TransactionController::class, 'update'])->name('booking.update');
+    //hapus transaction
+    Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');
 });
 
 // Middleware Customer
-// Route::middleware(['customer'])->group(function(){
+Route::middleware(['customer'])->group(function(){
 //transactions customer
 Route::get('/order/add/{id}', [TransactionController::class, 'showItem'])->name('order.showItem');
-Route::post('/order/add', [TransactionController::class, 'bookingByUser'])->name('order.add')->middleware(('auth.user'));
-// });
+Route::post('/order/add', [TransactionController::class, 'bookingByUser'])->name('order.add');
+// Riwayat page
+Route::get('/order', [TransactionController::class, 'show'])->name('order');
+//booking page
+Route::get('/booking', [TransactionController::class, 'showBook'])->name('order.book');
+Route::put('/booking/{id}/verify', [TransactionController::class, 'verifyBooking'])->name('booking.verify');
+});
+
+Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');

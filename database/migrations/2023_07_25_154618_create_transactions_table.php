@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('hari_kembali');
             $table->bigInteger('lama_peminjaman');
             $table->string('pembayaran');
-            $table->string('ktp');
+            $table->string('ktp')->nullable();
             $table->timestamps();
         });
 

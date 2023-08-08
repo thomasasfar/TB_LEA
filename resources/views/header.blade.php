@@ -11,7 +11,7 @@
                 <li><a href="/transactions" class="nav-link px-2 link-body-emphasis">Transaksi</a></li>
                 @elseif (Auth::user()->role == 'customer')
                 <li><a href="/katalog" class="nav-link px-2 link-body-emphasis">Daftar Barang</a></li>
-                
+                <li><a href="/order" class="nav-link px-2 link-body-emphasis">Orderan</a></li>
                 @endif
 
             </ul>

@@ -43,7 +43,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" action="{{ route('transaction.storeByAdmin') }}" id="addFormTransaksi" enctype="multipart/form-data">
+                        <form method="post" action="{{ route('transaction.storeByAdmin') }}" id="addFormTransaksi"
+                            enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
                                 <label for="PilihUser" class="form-label">Customer</label>
@@ -102,18 +103,18 @@
         {{-- Table --}}
         <table class="table table-striped">
             <thead>
-                <tr style="text-align: center">
+                <tr style="text-align: left">
                     <th scope="col" style="width: 3%">No</th>
                     <th scope="col" style="width: 10%">Username</th>
                     <th scope="col" style="width:8%">Kode Barang</th>
-                    <th scope="col" style="width: 14%">Nama Barang</th>
+                    <th scope="col" style="width: 12%">Nama Barang</th>
                     <th scope="col" style="width: 10%">Hari Pengambilan</th>
                     <th scope="col" style="width: 10%">Hari Kembali</th>
                     <th scope="col" style="width: 9%">Lama Peminjaman</th>
-                    <th scope="col" style="width: 10%">Total Harga</th>
+                    <th scope="col" style="width: 9%">Total Harga</th>
                     <th scope="col" style="width: 8%">Pembayaran</th>
                     <th scope="col" style="width: 8%">Status</th>
-                    <th scope="col" style="width: 10%">Aksi</th>
+                    <th scope="col" style="width: 13%">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -140,6 +141,8 @@
                             <td style="color:blue">Verified</td>
                         @elseif ($t->status == 'done')
                             <td style="color:brown">Done</td>
+                        @elseif ($t->status == 'pending')
+                            <td style="color: coral">Pending</td>
                         @endif
 
                         <td>
@@ -167,20 +170,25 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
-                                        <form action="{{ route('transactions.verify', $t->id) }}"
-                                            method="POST">
+                                        <form action="{{ route('transactions.verify', $t->id) }}" method="POST"
+                                            enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
                                             <div class="modal-body">
-                                                @if ($t->status === 'booking' && $t->pembayaran === 'lunas')
+                                                @if ($t->status === 'booking' && $t->pembayaran === 'dp')
                                                     <div class="mb-3">
-                                                        <label for="editTipeKamar">Status</label>
+                                                        <label for="ubahStatus">Status</label>
                                                         <select class="form-select" id="verify" name="status">
                                                             <option selected>Pilih</option>
                                                             <option value="verified"
                                                                 {{ $t->status == 'verified' ? 'selected' : '' }}>Verified
                                                             </option>
                                                         </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="UploadKTP">Upload KTP</label>
+                                                        <input type="file" class="form-control" id="UploadKTP"
+                                                            name="ktp" required>
                                                     </div>
                                                 @elseif ($t->status === 'verified' && $t->pembayaran === 'lunas')
                                                     <div class="mb-3">
@@ -192,12 +200,8 @@
                                                             </option>
                                                         </select>
                                                     </div>
-                                                @elseif ($t->status === 'booking' && $t->pembayaran === 'dp')
+                                                @elseif ($t->status === 'pending' && $t->pembayaran === 'lunas')
                                                     <div class="mb-3">
-                                                        <p class="fw-semibold" style="color: #13315C">Payment is made
-                                                            offline at StayScape reception, proceed to confirm customer
-                                                            payment.</p>
-                                                        <hr>
                                                         <p class="fw-normal">Change status transaction </p>
                                                         <label for="editTipeKamar">Status</label>
                                                         <select class="form-select" id="verify" name="status">
@@ -207,27 +211,113 @@
                                                             </option>
                                                         </select>
                                                     </div>
-                                                @else
-                                                    <div class="mb-3">
-                                                        <label for="editTipeKamar">Status</label>
-                                                        <select class="form-select" id="verify" name="status">
-                                                            <option selected>Pilih</option>
-                                                            <option value="check out"
-                                                                {{ $t->status == 'check out' ? 'selected' : '' }}>Check
-                                                                Out
-                                                            </option>
-                                                        </select>
-                                                    </div>
                                                 @endif
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Batal</button>
                                                 <button type="submit" class="btn btn-danger">OK</button>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
+
+                            {{-- Edit Transaksi --}}
+                            @if ($t->status === 'booking')
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                    data-bs-target="#modalEditTransaksi{{ $t->id }}">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </button>
+                            @else
+                                <button type="button" class="btn btn-secondary" disabled>
+                                    <i class="bi bi-pencil-fill"></i>
+                                </button>
+                            @endif
+                            <!-- Modal Edit-->
+                            <div class="modal fade" id="modalEditTransaksi{{ $t->id }}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit data Transaksi
+                                            </h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <form method="POST" action="{{ route('booking.update', $t->id) }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="no_kamar" class="form-label">Barang</label>
+                                                    <select class="form-select" id="no_kamar"
+                                                        aria-label="Default select example" name="no_kamar">
+                                                        <option value="{{ $t->id_barang }}">
+                                                            {{ $t->barang->kode }} |
+                                                            {{ $t->barang->nama_barang }}
+                                                            - Rp{{ $t->barang->harga }}</option>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="" class="form-label"></label>
+                                                    <input type="hidden">
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="inputHarga" class="form-label">Tanggal
+                                                        Pengambilan</label>
+                                                    <input type="date"
+                                                        style="margin-left: 50px; border-radius:8px; width: 250px"
+                                                        name="check_in_at" value="{{ $t->hari_ambil }}" required>
+                                                </div>
+                                                <div class="mb-5">
+                                                    <label for="inputHarga" class="form-label">Tanggal
+                                                        Pengembalian</label>
+                                                    <input type="date"
+                                                        style="margin-left: 37px; border-radius:8px; width: 250px"
+                                                        name="check_out_at" value="{{ $t->check_out_at }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-success">Update</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Button Hapus --}}
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#modalHapusTransaksi{{ $t->id }}">
+                                <i class="bi bi-trash3"></i>
+                            </button>
+
+                            {{-- Modal Hapus --}}
+                            <div class="modal fade" id="modalHapusTransaksi{{ $t->id }}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Yakin ingin menghapus
+                                                transaksi
+                                                ini ?
+                                            </h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                            <form action="{{ route('transactions.destroy', $t->id) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </td>
 
