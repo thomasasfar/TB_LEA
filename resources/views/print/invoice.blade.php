@@ -1,26 +1,38 @@
-@extends('template')
+<!DOCTYPE html>
+<html>
 
-@section('title')
-    Invoice
-@endsection
+<head>
+    <title>Stayscape Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
 
-@section('konten')
-@include('header')
-<div class="container">
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 5px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        @if (session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                        @endif
                         <h1>Invoice</h1>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="text-center">
-                                    
+
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -28,67 +40,57 @@
                                     <tr>
                                         <td width="30%">Peminjam</td>
                                         <td>:</td>
-                                     
+                                        <td>{{ $transactions->user->nama }}</td>
                                     </tr>
-                                
+
                                     <tr>
                                         <td>No Telp</td>
                                         <td>:</td>
+                                        <td>{{ $transactions->user->no_hp }}</td>
                                     </tr>
                                     <tr>
                                         <td>Email</td>
                                         <td>:</td>
-                                      
+                                        <td>{{ $transactions->user->email }}</td>
                                     </tr>
                                 </table>
                             </div>
-                           
+
                             <div class="col-md-12 mt-3">
-                             
+
                                 @csrf
                                 <table class="table table-hover table-bordered">
                                     <thead>
                                         <tr>
-                                            <td>#</td>
                                             <td>Barang</td>
-                                            <td>Harga</td>
+                                            <td>Harga per Hari</td>
                                             <td>Tanggal Peminjaman</td>
                                             <td>Tanggal Pengembalian</td>
                                             <td>Lama Peminjaman</td>
                                             <th>Total Harga</th>
                                         </tr>
                                     </thead>
-                                    
-                                   
+
+
                                     <!-- MENAMPILKAN PRODUK YANG TELAH DITAMBAHKAN -->
-                                    
-                                   
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ $transactions->barang->kode }} - {{ $transactions->barang->nama_barang }}</td>
+                                            <td>{{ $transactions->barang->harga }}</td>
+                                            <td>{{ $transactions->hari_ambil }}</td>
+                                            <td>{{ $transactions->hari_kembali }}</td>
+                                            <td>{{ $transactions->lama_peminjaman }}</td>
+                                            <td>{{ $transactions->total_harga }}</td>
+                                        </tr>
+                                    </tbody>
+
                                     <!-- FORM UNTUK MEMILIH PRODUK YANG AKAN DITAMBAHKAN -->
                                 </table>
-                                </form>
                             </div>
-                            
-                            <!-- MENAMPILKAN TOTAL & TAX -->
-                            <div class="col-md-4 offset-md-8">
-                                <table class="table table-hover table-bordered">
-                                    <tr>
-                                        <td>Sub Total</td>
-                                        <td>:</td>
-                                       
-                                    </tr>
-                                    
-                                    <tr>
-                                        <td>Total</td>
-                                        <td>:</td>
-                                     
-                                    </tr>
-                                </table>
-                            </div>
-                            <!-- MENAMPILKAN TOTAL & TAX -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-@endsection
+</body>

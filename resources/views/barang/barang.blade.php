@@ -8,6 +8,22 @@
     @include('header')
     <main class="container">
 
+        {{-- menampilkan alert msg --}}
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <h1 class="text-center mb-4">List Barang</h1>
 
         @if (Auth::user()->role == 'admin')

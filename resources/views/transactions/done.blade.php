@@ -32,13 +32,13 @@
                 <a class="nav-link " href="{{ route('order') }}">Semua</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link mx-3 active-tab" aria-current="page" href="{{ route('order.book') }}">Booking</a>
+                <a class="nav-link mx-3" href="{{ route('order.book') }}">Booking</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('order.verified') }}">Verified</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link mx-3" href="{{ route('order.done') }}">Done</a>
+                <a class="nav-link mx-3 active-tab" aria-current="page" href="{{ route('order.done') }}">Done</a>
             </li>
         </ul>
 
@@ -84,53 +84,15 @@
                                         <h5 class="card-text">Rp{{ $tr->total_harga }}</h5>
                                         <br>
                                         <div class="align-self-end">
-                                            @if ($tr->status === 'booking')
-                                                <button class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#modalVerifyStatus{{ $tr->id }}">Verifikasi</button>
-                                            @else
-                                                <button class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#modalVerifyStatus{{ $tr->id }}"
-                                                    disabled>Verifikasi</button>
-                                            @endif
-                                        </div>
-
-                                        <!-- Modal Verify Status-->
-                                        <div class="modal fade" id="modalVerifyStatus{{ $tr->id }}" tabindex="-1"
-                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="exampleModalLabel"> Verifikasi
-                                                            Booking
-                                                        </h1>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form action="{{ route('booking.verify', $tr->id) }}"
-                                                            method="POST" class="d-inline" enctype="multipart/form-data">
-                                                            @csrf
-                                                            @method('PUT')
-                                                            <label class="fw-semibold" for="pembayaran">Upload KTP</label>
-                                                            <input type="file" class="form-control" id="UploadKTP"
-                                                                name="ktp">
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Cancel</button>
-
-                                                        <button type="submit" class="btn btn-success">Verify</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <a href="{{ route('cetak.invoice', $tr->id) }}" class="btn btn-primary"><i class="bi bi-download"></i></a>
                                         </div>
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
         @endforeach
     </main>
 

@@ -7,7 +7,39 @@
 @section('konten')
     @include('header')
 
+    <style>
+        .active-tab::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: #000;
+            /* Ganti dengan warna yang sesuai */
+            margin-top: 5px;
+            /* Sesuaikan jarak dari teks */
+        }
+
+        .nav-link {
+            color: #000;
+        }
+    </style>
+
     <main class="container">
+
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link active-tab" aria-current="page" href="{{ route('order') }}">Semua</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mx-3" href="{{ route('order.book') }}">Booking</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('order.verified') }}">Verified</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mx-3" href="{{ route('order.done') }}">Done</a>
+            </li>
+        </ul>
 
         {{-- menampilkan alert msg --}}
         @if (session('success'))

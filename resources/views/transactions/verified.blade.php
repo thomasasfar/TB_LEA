@@ -32,10 +32,10 @@
                 <a class="nav-link " href="{{ route('order') }}">Semua</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link mx-3 active-tab" aria-current="page" href="{{ route('order.book') }}">Booking</a>
+                <a class="nav-link mx-3" href="{{ route('order.book') }}">Booking</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('order.verified') }}">Verified</a>
+                <a class="nav-link active-tab" aria-current="page" href="{{ route('order.verified') }}">Verified</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link mx-3" href="{{ route('order.done') }}">Done</a>
@@ -84,36 +84,35 @@
                                         <h5 class="card-text">Rp{{ $tr->total_harga }}</h5>
                                         <br>
                                         <div class="align-self-end">
-                                            @if ($tr->status === 'booking')
-                                                <button class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#modalVerifyStatus{{ $tr->id }}">Verifikasi</button>
-                                            @else
-                                                <button class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#modalVerifyStatus{{ $tr->id }}"
-                                                    disabled>Verifikasi</button>
-                                            @endif
+                                            <button class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#modalUpdateKembali{{ $tr->id }}">Change</button>
                                         </div>
 
-                                        <!-- Modal Verify Status-->
-                                        <div class="modal fade" id="modalVerifyStatus{{ $tr->id }}" tabindex="-1"
+                                        {{-- Modal update Tanggal kembali --}}
+                                        <div class="modal fade" id="modalUpdateKembali{{ $tr->id }}" tabindex="-1"
                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="exampleModalLabel"> Verifikasi
-                                                            Booking
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel"> Ganti tanggal
+                                                            pengembalian
                                                         </h1>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="{{ route('booking.verify', $tr->id) }}"
-                                                            method="POST" class="d-inline" enctype="multipart/form-data">
+                                                        <p>Semua biaya tambahan akan diambil langsung dari credit card anda
+                                                        </p>
+                                                        <form action="{{ route('order.update', $tr->id) }}" method="POST"
+                                                            class="d-inline" enctype="multipart/form-data">
                                                             @csrf
                                                             @method('PUT')
-                                                            <label class="fw-semibold" for="pembayaran">Upload KTP</label>
-                                                            <input type="file" class="form-control" id="UploadKTP"
-                                                                name="ktp">
+                                                            <input type="hidden" name="hari_ambil"
+                                                                value="{{ $tr->hari_ambil }}">
+                                                            <label class="fw-semibold" for="pembayaran">Tanggal
+                                                                Kembali</label>
+                                                            <input type="date" id="gantiTanggal"
+                                                                value="{{ $tr->hari_kembali }}" name="hari_kembali">
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"

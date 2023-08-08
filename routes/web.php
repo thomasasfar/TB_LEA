@@ -20,6 +20,12 @@ use App\Http\Controllers\TransactionController;
 //     return view('welcome');
 // });
 
+Route::middleware(['guest'])->group(function(){
+    Route::get('/', function () {
+        return redirect()->route('login');
+    });
+});
+
 //login
 Route::get('/login', [AuthController::class, 'getLogin'])->name('login');
 Route::post('/auth/login', [AuthController::class, 'login']);
@@ -43,6 +49,9 @@ Route::put('profile/updatephoto', [AuthController::class, 'updatePhoto'])->name(
 //password
 Route::get('/password', [AuthController::class, 'change'])->name('password');
 Route::put('/password/update', [AuthController::class, 'changePassword'])->name('password.update');
+
+//cetak invoice
+Route::get('/print/invoice/{id}', [TransactionController::class, 'cetakInvoice'])->name('cetak.invoice');
 
 //Middleware Admin
 Route::middleware(['admin'])->group(function(){
@@ -71,8 +80,12 @@ Route::post('/order/add', [TransactionController::class, 'bookingByUser'])->name
 // Riwayat page
 Route::get('/order', [TransactionController::class, 'show'])->name('order');
 //booking page
-Route::get('/booking', [TransactionController::class, 'showBook'])->name('order.book');
-Route::put('/booking/{id}/verify', [TransactionController::class, 'verifyBooking'])->name('booking.verify');
+Route::get('/order/booking', [TransactionController::class, 'showBook'])->name('order.book');
+Route::put('/order/booking/{id}/verify', [TransactionController::class, 'verifyBooking'])->name('booking.verify');
+//verified page
+Route::get('/order/verified', [TransactionController::class, 'showVerified'])->name('order.verified');
+//done page
+Route::get('/order/done', [TransactionController::class, 'showDone'])->name('order.done');
 //ganti tanggal kembali
 Route::put('/order/{id}/update', [TransactionController::class, 'updateKembali'])->name('order.update');
 });

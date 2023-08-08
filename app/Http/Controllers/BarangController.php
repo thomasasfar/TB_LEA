@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+// use illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Barang;
 use Illuminate\Support\Facades\Storage;
@@ -55,7 +56,7 @@ class BarangController extends Controller
         }
 
         Barang::create($validasi);
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Barang berhasil ditambahkan');
 
     }
 
@@ -142,7 +143,7 @@ class BarangController extends Controller
         // Update data barang
         $barang->update($validasi);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Data barang berhasil diperbarui');
     }
 
     /**
@@ -154,11 +155,12 @@ class BarangController extends Controller
     public function destroy(Barang $barang)
     {
         $barang->delete();
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Data barang berhasil dihapus');
     }
 
     public function katalog(){
         $barang = Barang::all();
+        // $user = Auth::user();
         return view('barang.katalog', compact('barang'));
 
         if (isset($results)) {

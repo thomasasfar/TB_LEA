@@ -261,6 +261,27 @@ class TransactionController extends Controller
         return view('transactions.booking', compact('user', 'barang', 'transactions'));
     }
 
+    public function showVerified()
+    {
+        $id_user = Auth::user();
+        $transactions = Transaction::where('id_user', $id_user->id)
+            ->whereIn('status', ['verified'])
+            ->get();
+        $user = User::find($id_user->id);
+        $barang = Barang::all();
+        return view('transactions.verified', compact('user', 'barang', 'transactions'));
+    }
+
+    public function showDone()
+    {
+        $id_user = Auth::user();
+        $transactions = Transaction::where('id_user', $id_user->id)
+            ->whereIn('status', ['done'])
+            ->get();
+        $user = User::find($id_user->id);
+        $barang = Barang::all();
+        return view('transactions.done', compact('user', 'barang', 'transactions'));
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -337,5 +358,26 @@ class TransactionController extends Controller
     {
         $barang = Barang::findOrFail($id);
         return view('transactions.itemOrder', compact('barang'));
+    }
+
+    public function cetakInvoice($id)
+    {
+        $transactions = Transaction::findOrFail($id);
+
+        $html = View::make('print.invoice', compact('transactions'))->render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        // $dompdf->setBasePath(public_path());
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        $output = $dompdf->output();
+
+        return Response::make($output, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="invoice.pdf"',
+        ]);
+
     }
 }
