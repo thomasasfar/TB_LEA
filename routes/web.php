@@ -76,3 +76,4 @@ Route::put('/booking/{id}/verify', [TransactionController::class, 'verifyBooking
 });
 
 Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+

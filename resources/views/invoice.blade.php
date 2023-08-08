@@ -1,7 +1,7 @@
 @extends('template')
 
 @section('title')
-    Home
+    Invoice
 @endsection
 
 @section('konten')
