@@ -6,6 +6,7 @@
         </a> --}}
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <img src="logo.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
                 @if (Auth::user()->role == 'admin')
                 <li><a href="/barang" class="nav-link px-2 link-body-emphasis">Daftar Barang</a></li>
                 <li><a href="/transactions" class="nav-link px-2 link-body-emphasis">Transaksi</a></li>
