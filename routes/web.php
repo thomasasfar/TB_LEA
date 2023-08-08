@@ -31,9 +31,9 @@ Route::post('/auth/register', [AuthController::class, 'store']);
 //logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::middleware(['auth'])->group(function(){
 //barang
 Route::get('/katalog', [BarangController::class, 'katalog']);
-
 
 //profile
 Route::get('/profile', [AuthController::class, 'show'])->name('profile');
@@ -73,6 +73,10 @@ Route::get('/order', [TransactionController::class, 'show'])->name('order');
 //booking page
 Route::get('/booking', [TransactionController::class, 'showBook'])->name('order.book');
 Route::put('/booking/{id}/verify', [TransactionController::class, 'verifyBooking'])->name('booking.verify');
+//ganti tanggal kembali
+Route::put('/order/{id}/update', [TransactionController::class, 'updateKembali'])->name('order.update');
 });
 
 Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+
+});

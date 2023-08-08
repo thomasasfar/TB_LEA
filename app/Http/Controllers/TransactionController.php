@@ -138,7 +138,6 @@ class TransactionController extends Controller
     {
         $request->validate([
             'status' => 'required',
-            'ktp' => 'required_if:status,verified|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
         ]);
 
         $transactions = Transaction::find($id);
@@ -162,7 +161,7 @@ class TransactionController extends Controller
                 return redirect()->back()->with('error', 'Anda harus mengunggah KTP untuk verifikasi');
             }
 
-            $ktpExtension = $request->file('ktp')->getClientOriginalExtension();
+        $ktpExtension = $request->file('ktp')->getClientOriginalExtension();
         $ktpFilename = $user->username . '-' . now()->timestamp . '.' . $ktpExtension;
         $request->file('ktp')->storeAs('ktp', $ktpFilename, 'public');
         $transactions->ktp = $ktpFilename;
@@ -196,7 +195,31 @@ class TransactionController extends Controller
         $transactions->pembayaran = 'lunas';
         $transactions->save();
 
-        return redirect('katalog')->with('success', 'Orderan anda akan segera diverifikasi admin');
+        return redirect()->back()->with('success', 'Orderan anda akan segera diverifikasi admin');
+    }
+
+    public function updateKembali(Request $request, $id)
+    {
+        $verifikasi = $request->validate([
+            'hari_kembali' => 'required|date',
+            'hari_ambil' => 'required|date|exists:transactions,hari_ambil'
+        ]);
+
+        $transactions = Transaction::findOrFail($id);
+        $barang = Barang::findOrFail($transactions->id_barang);
+
+        $hari_ambil = Carbon::parse($verifikasi['hari_ambil'])->format('Y-m-d');
+        $hari_kembali = Carbon::parse($verifikasi['hari_kembali'])->format('Y-m-d');
+        $lama_peminjaman = Carbon::parse($verifikasi['hari_ambil'])->diffInDays(Carbon::parse($verifikasi['hari_kembali']));
+        $total_harga = $lama_peminjaman * $barang->harga;
+
+        $transactions->hari_kembali = $hari_kembali;
+        $transactions->hari_ambil = $hari_ambil;
+        $transactions->lama_peminjaman = $lama_peminjaman;
+        $transactions->total_harga = $total_harga;
+
+        $transactions->save();
+        return redirect()->back()->with('success', 'Tanggal pengembalian telah diperbarui');
     }
 
     public function verifyTransaction($id)

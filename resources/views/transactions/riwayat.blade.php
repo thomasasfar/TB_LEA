@@ -56,10 +56,10 @@
                                     <button class="btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#modalVerifyStatus{{ $tr->id }}"
                                             disabled>Verifikasi</button>
-                                    {{-- @elseif ($tr->status === 'verified')
+                                    @elseif ($tr->status === 'verified')
                                     <button class="btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#modalUpdateKembali{{ $tr->id }}"
-                                            disabled>Verifikasi</button> --}}
+                                            >Change</button>
                                     @else
                                         <button class="btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#modalVerifyStatus{{ $tr->id }}"
@@ -86,6 +86,38 @@
                                                 @method('PUT')
                                                 <label class="fw-semibold" for="pembayaran">Upload KTP</label>
                                                 <input type="file" class="form-control" id="UploadKTP" name="ktp">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancel</button>
+
+                                            <button type="submit" class="btn btn-success">Verify</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Modal update Tanggal kembali --}}
+                            <div class="modal fade" id="modalUpdateKembali{{ $tr->id }}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel"> Ganti tanggal pengembalian
+                                            </h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Semua biaya tambahan akan diambil langsung dari credit card anda</p>
+                                            <form action="{{ route('order.update', $tr->id) }}" method="POST"
+                                                class="d-inline" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="hari_ambil" value="{{ $tr->hari_ambil }}">
+                                                <label class="fw-semibold" for="pembayaran">Tanggal Kembali</label>
+                                                <input type="date" id="gantiTanggal" value="{{ $tr->hari_kembali }}" name="hari_kembali">
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
