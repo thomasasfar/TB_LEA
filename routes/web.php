@@ -76,3 +76,5 @@ Route::put('/booking/{id}/verify', [TransactionController::class, 'verifyBooking
 //ganti tanggal kembali
 Route::put('/order/{id}/update', [TransactionController::class, 'updateKembali'])->name('order.update');
 });
+
+});
