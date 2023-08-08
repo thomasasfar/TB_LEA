@@ -142,19 +142,20 @@ class AuthController extends Controller
         $request->validate([
             'current_password' => 'required',
             'new_password' => 'required|min:8|confirmed',
+            'confirm_password' => 'required|min:8|same:new_password',
         ]);
-    
+
         $user = Auth::user();
-    
-        if (Hash::check($request->current_password, $user->password)) {
+
+        if (Hash::check($request->input('current_password'), $user->password)) {
             $user->password = Hash::make($request->new_password);
             $user->save();
-    
-            return redirect('/profile/update')->with('success', 'Password berhasil diubah.');
+
+            return redirect('/profile')->with('success', 'Password berhasil diubah.');
         } else {
             return redirect()->back()->with('error', 'Password saat ini tidak cocok.');
         }
     }
 
-        
+
 }

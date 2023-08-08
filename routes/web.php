@@ -70,6 +70,8 @@ Route::middleware(['admin'])->group(function(){
     Route::put('/booking/{id}', [TransactionController::class, 'update'])->name('booking.update');
     //hapus transaction
     Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+    //detail transaction
+    Route::get('transaction/detail/{id}', [TransactionController::class, 'showDetail'])->name('transactions.detail');
 });
 
 // Middleware Customer

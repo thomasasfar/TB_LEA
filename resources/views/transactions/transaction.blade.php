@@ -319,6 +319,8 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <a href="{{ route('transactions.detail', $t->id) }}" class="btn btn-secondary"><i class="bi bi-exclamation-circle"></i></a>
                         </td>
 
                     </tr>

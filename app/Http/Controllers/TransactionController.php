@@ -360,6 +360,12 @@ class TransactionController extends Controller
         return view('transactions.itemOrder', compact('barang'));
     }
 
+    public function showDetail($id)
+    {
+        $transactions = Transaction::findOrFail($id);
+        return view('transactions.detail', compact('transactions'));
+    }
+
     public function cetakInvoice($id)
     {
         $transactions = Transaction::findOrFail($id);

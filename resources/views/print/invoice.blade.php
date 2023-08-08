@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Stayscape Booking</title>
+    <title>Invoice</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,29 +36,28 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <table>
+                                <table class="table">
                                     <tr>
                                         <td width="30%">Peminjam</td>
-                                        <td>:</td>
-                                        <td>{{ $transactions->user->nama }}</td>
+                                        <td>:{{ $transactions->user->nama }}</td>
                                     </tr>
 
                                     <tr>
                                         <td>No Telp</td>
-                                        <td>:</td>
-                                        <td>{{ $transactions->user->no_hp }}</td>
+                                        <td>:{{ $transactions->user->no_hp }}</td>
                                     </tr>
                                     <tr>
                                         <td>Email</td>
-                                        <td>:</td>
-                                        <td>{{ $transactions->user->email }}</td>
+                                        <td>:{{ $transactions->user->email }}</td>
                                     </tr>
                                 </table>
                             </div>
 
+                            <br>
+                            <br>
+
                             <div class="col-md-12 mt-3">
 
-                                @csrf
                                 <table class="table table-hover table-bordered">
                                     <thead>
                                         <tr>
