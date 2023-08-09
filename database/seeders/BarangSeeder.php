@@ -19,8 +19,40 @@ class BarangSeeder extends Seeder
             'kode' => 'A001',
             'nama_barang' => 'Tenda',
             'status' => 'Tersedia',
-            'harga' => '120.000',
-            
+            'harga' => '120000',
+            'image' => 'Tenda.jpg'
+        ]);
+
+        DB::table('barangs')->insert([
+            'kode' => 'A002',
+            'nama_barang' => 'Carrier',
+            'status' => 'Tersedia',
+            'harga' => '100000',
+            'image' => 'Carrier.jpg'
+        ]);
+
+        DB::table('barangs')->insert([
+            'kode' => 'A003',
+            'nama_barang' => 'Kompor',
+            'status' => 'Tersedia',
+            'harga' => '80000',
+            'image' => 'Kompor.jpg'
+        ]);
+
+        DB::table('barangs')->insert([
+            'kode' => 'A004',
+            'nama_barang' => 'Lentera',
+            'status' => 'Tersedia',
+            'harga' => '20000',
+            'image' => 'LenteraCamping.jpg'
+        ]);
+
+        DB::table('barangs')->insert([
+            'kode' => 'A005',
+            'nama_barang' => 'Sleeping Bag',
+            'status' => 'Tersedia',
+            'harga' => '90000',
+            'image' => 'SleepingBag.jpg'
         ]);
     }
 }

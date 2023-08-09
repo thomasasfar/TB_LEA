@@ -8,6 +8,7 @@
     @include('header')
     <main class="container">
 
+
         {{-- menampilkan alert msg --}}
         @if (session('success'))
             <div class="alert alert-success">

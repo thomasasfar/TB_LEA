@@ -7,6 +7,8 @@
 @section('konten')
     @include('header')
 
+    <h3 style="text-align: center">Katalog</h3>
+
     @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
