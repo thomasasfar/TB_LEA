@@ -64,14 +64,16 @@ Route::middleware(['admin'])->group(function(){
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::put('/transactions/{id}/verify', [TransactionController::class, 'verify'])->name('transactions.verify');
     //add transaction booking by admin
-    Route::get('/transaction/create', [TransactionController::class, 'create'])->name('transaction.create');
     Route::post('/transaction/storeByAdmin', [TransactionController::class, 'storeByAdmin'])->name('transaction.storeByAdmin');
+    Route::post('/transaction/bookingByAdmin', [TransactionController::class, 'bookingByAdmin'])->name('transaction.bookingByAdmin');
     //edit transaction booking by admin
     Route::put('/booking/{id}', [TransactionController::class, 'update'])->name('booking.update');
     //hapus transaction
     Route::delete('/transactions/{id}/delete', [TransactionController::class, 'destroy'])->name('transactions.destroy');
     //detail transaction
     Route::get('transaction/detail/{id}', [TransactionController::class, 'showDetail'])->name('transactions.detail');
+    //cetak laporan
+    Route::get('/print/laporan', [TransactionController::class, 'cetakLaporan'])->name('cetak.laporan');
 });
 
 // Middleware Customer

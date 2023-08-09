@@ -133,6 +133,46 @@ class TransactionController extends Controller
         }
     }
 
+    public function bookingByAdmin(Request $request)
+    {
+        $validated = $request->validate([
+            'username' => 'required',
+            'kode' => 'required',
+            'hari_ambil' => 'required|date',
+            'hari_kembali' => 'required|date',
+        ]);
+
+        $barang = Barang::find($validated['kode']);
+        $user = User::find($validated['username']);
+
+        if ($barang) {
+            $hari_ambil = Carbon::parse($validated['hari_ambil'])->format('Y-m-d');
+            $hari_kembali = Carbon::parse($validated['hari_kembali'])->format('Y-m-d');
+            $lama_peminjaman = Carbon::parse($validated['hari_ambil'])->diffInDays(Carbon::parse($validated['hari_kembali']));
+            $total_harga = $lama_peminjaman * $barang->harga;
+
+            $dataPinjaman = [
+                'id_user' => $validated['username'],
+                'id_barang' => $validated['kode'],
+                // 'hari_ambil' => $validated['hari_ambil'],
+                // 'hari_kembali' => $validated['hari_kembali'],
+                'hari_ambil' => $hari_ambil,
+                'hari_kembali' => $hari_kembali,
+                'lama_peminjaman' => $lama_peminjaman,
+                'total_harga' => $total_harga,
+                'status' => 'booking',
+                'pembayaran' => 'dp',
+            ];
+
+
+            $barang->status = 'Tidak Tersedia';
+            $barang->save();
+            Transaction::create($dataPinjaman);
+
+            return redirect('transactions')->with('success', 'Booking Berhasil Dilakukan!');
+        }
+    }
+
 
     public function verify(Request $request, $id)
     {
@@ -374,7 +414,6 @@ class TransactionController extends Controller
 
         $dompdf = new Dompdf();
         $dompdf->loadHtml($html);
-        // $dompdf->setBasePath(public_path());
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
@@ -386,4 +425,28 @@ class TransactionController extends Controller
         ]);
 
     }
+
+    public function cetakLaporan()
+    {
+        $transactions = Transaction::all();
+        $user = User::all();
+        $barang = Barang::all();
+
+        $html = View::make('print.laporan', compact('transactions', 'user', 'barang'))->render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+
+        $output = $dompdf->output();
+
+        return Response::make($output, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="laporan.pdf"',
+        ]);
+
+    }
+
+
 }

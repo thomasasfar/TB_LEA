@@ -20,7 +20,7 @@
                     <div class="card my-3 h-80">
                         @if ($m->image != '')
                             <img src="{{ asset('storage/image/' . $m->image) }}" alt="Gambar Barang" class="card-img-top"
-                                style="height: 240px">
+                                style="height: 300px">
                         @else
                             <!-- Tampilkan gambar placeholder jika tidak ada gambar yang diunggah -->
                             <img src="{{ asset('storage/uploads/Sepatu-1691163151.png') }}" alt="Gambar Placeholder"

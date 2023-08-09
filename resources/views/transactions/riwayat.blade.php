@@ -61,43 +61,50 @@
             <div class="container card mb-3" style="width: 800px; height:200px">
                 <div class="row g-0 justify-content-between">
                     <div class="col-md-4 ">
-                        <img src="{{ asset('storage/image/' . $tr->barang->image) }}" alt="Gambar Barang" style="width: 200px; height:200px"
-                            alt="...">
+                        <img src="{{ asset('storage/image/' . $tr->barang->image) }}" alt="Gambar Barang"
+                            style="width: 200px; height:200px" alt="...">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body d-flex flex-column">
                             <div class="row g-0 ">
                                 <div class="col-sm-6 col-md-8">
-                                <h5 class="card-title">ID Transaksi: {{ $tr->id }}</h5>
-                                <h6 class="card-text">{{ $tr->barang->kode }} | {{ $tr->barang->nama_barang }}</h6>
-                                <p>{{$tr->status}}</p>
-                                <p class="card-text text-primary">{{ $tr->hari_ambil }} s/d {{ $tr->hari_kembali }}</p>
-                                <p class="card-text"><small class="text-muted">{{ $tr->lama_peminjaman }} hari x
-                                        Rp{{ $tr->barang->harga }}</small></p>
+                                    <h5 class="card-title">ID Transaksi: {{ $tr->id }}</h5>
+                                    <h6 class="card-text">{{ $tr->barang->kode }} | {{ $tr->barang->nama_barang }}</h6>
+                                    <p>{{ $tr->status }}</p>
+                                    <p class="card-text text-primary">{{ $tr->hari_ambil }} s/d {{ $tr->hari_kembali }}
+                                    </p>
+                                    <p class="card-text"><small class="text-muted">{{ $tr->lama_peminjaman }} hari x
+                                            Rp{{ $tr->barang->harga }}</small></p>
                                 </div>
                                 <div class="col-6 col-md-4">
-                                <div class="align-self-end">
-                                    <br>
-                                    <h6 class="card-text">Total Harga</h6>
-                                    <h5 class="card-text">Rp{{ $tr->total_harga }}</h5>
-                                    <br>
-                                    @if ($tr->status === 'booking')
-                                        <button class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#modalVerifyStatus{{ $tr->id }}">Verifikasi</button>
-                                    @elseif ($tr->status === 'pending')
-                                    <button class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#modalVerifyStatus{{ $tr->id }}"
-                                            disabled>Verifikasi</button>
-                                    @elseif ($tr->status === 'verified')
-                                    <button class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#modalUpdateKembali{{ $tr->id }}"
-                                            >Change</button>
-                                    @else
-                                        <button class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#modalVerifyStatus{{ $tr->id }}"
-                                            disabled>Verifikasi</button>
-                                    @endif
-                                </div>
+                                    <div class="align-self-end">
+                                        <br>
+                                        <h6 class="card-text">Total Harga</h6>
+                                        <h5 class="card-text">Rp{{ $tr->total_harga }}</h5>
+                                        <br>
+                                        @if ($tr->status === 'booking')
+                                            <button class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#modalVerifyStatus{{ $tr->id }}">Verifikasi</button>
+                                        @elseif ($tr->status === 'pending')
+                                            <button class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#modalVerifyStatus{{ $tr->id }}"
+                                                disabled>Verifikasi</button>
+                                        @elseif ($tr->status === 'verified')
+                                            <a href="{{ route('cetak.invoice', $tr->id) }}" class="btn btn-primary"><i
+                                                    class="bi bi-download"></i></a>
+                                            <button class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#modalUpdateKembali{{ $tr->id }}">Change</button>
+                                        @elseif ($tr->status === 'done')
+                                            <div class="align-self-end">
+                                                <a href="{{ route('cetak.invoice', $tr->id) }}" class="btn btn-primary"><i
+                                                        class="bi bi-download"></i></a>
+                                            </div>
+                                        @else
+                                            <button class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#modalVerifyStatus{{ $tr->id }}"
+                                                disabled>Verifikasi</button>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                             <!-- Modal Verify Status-->
@@ -149,7 +156,8 @@
                                                 @method('PUT')
                                                 <input type="hidden" name="hari_ambil" value="{{ $tr->hari_ambil }}">
                                                 <label class="fw-semibold" for="pembayaran">Tanggal Kembali</label>
-                                                <input type="date" id="gantiTanggal" value="{{ $tr->hari_kembali }}" name="hari_kembali">
+                                                <input type="date" id="gantiTanggal" value="{{ $tr->hari_kembali }}"
+                                                    name="hari_kembali">
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"

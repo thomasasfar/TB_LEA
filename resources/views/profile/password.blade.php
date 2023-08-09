@@ -8,6 +8,23 @@
     @include('header')
 
     <div class="container">
+        {{-- menampilkan alert msg --}}
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
@@ -18,11 +35,11 @@
                             <div class="alert alert-success">{{ session('success') }}</div>
                         @endif
 
-                        <form method="POST" action="/password/update">
+                        <form method="POST" action="{{ route('password.update') }}">
                             @csrf
                             @method('PUT')
 
-                            
+
                             <div class="form-group row">
                                 <label for="current_password" class="col-md-4 col-form-label text-md-right">Password Saat Ini</label>
 
@@ -55,7 +72,7 @@
                                 <label for="new_password_confirmation" class="col-md-4 col-form-label text-md-right">Konfirmasi Password Baru</label>
 
                                 <div class="col-md-6">
-                                    <input id="new_password_confirmation" type="password" class="form-control" name="new_password_confirmation" required>
+                                    <input id="new_password_confirmation" type="password" class="form-control" name="confirm_password" required>
                                 </div>
                             </div>
 
@@ -64,7 +81,7 @@
                              </br>
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
-                                
+
                                     <button type="submit" class="btn btn-primary">
                                         Ubah Password
                                     </button>

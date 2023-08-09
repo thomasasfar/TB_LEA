@@ -29,9 +29,14 @@
         {{-- Button Tambah --}}
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahTransaksi">
-            Tambah Transaksi
+            + Ambil Langsung
         </button>
 
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahBooking">
+            + Booking
+        </button>
+        <br>
+        <a class="btn btn-info" href="{{ route('cetak.laporan') }}"><i class="bi bi-download"></i></a>
 
         <!-- Modal Tambah Transaksi -->
         <div class="modal fade" id="modalTambahTransaksi" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -93,6 +98,64 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                         <button type="submit" class="btn btn-primary">Tambah</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Booking Transaksi -->
+        <div class="modal fade" id="modalTambahBooking" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Booking</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{{ route('transaction.bookingByAdmin') }}" id="addFormTransaksi"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="PilihUser" class="form-label">Customer</label>
+                                <select class="form-select" aria-label="Default select example" name="username"
+                                    id="username" required>
+                                    <option selected>Pilih</option>
+                                    @foreach ($user as $u)
+                                        <option value="{{ $u->id }}">{{ $u->id }} | {{ $u->username }} -
+                                            {{ $u->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="PilihBarang" class="form-label">Product</label>
+                                <select class="form-select" aria-label="Default select example" name="kode"
+                                    id="kode" required>
+                                    <option selected>Pilih</option>
+                                    @foreach ($barang as $b)
+                                        @if ($b->status == 'Tersedia')
+                                            <option value="{{ $b->id }}">{{ $b->kode }} | {{ $b->nama_barang }}
+                                                -
+                                                Rp{{ $b->harga }}
+                                            </option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="PilihPengambilan" class="form-label">Tanggal Pengambilan</label>
+                                <input type="date" id="PilihPengambilan" name="hari_ambil">
+                            </div>
+                            <div class="mb-3">
+                                <label for="PilihPengembalian" class="form-label">Tanggal Pengembalian</label>
+                                <input type="date" id="PilihPengembalian" name="hari_kembali">
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Booking</button>
                     </div>
                     </form>
                 </div>
@@ -321,6 +384,13 @@
                             </div>
 
                             <a href="{{ route('transactions.detail', $t->id) }}" class="btn btn-secondary"><i class="bi bi-exclamation-circle"></i></a>
+                            @if ($t->status === 'done')
+                            <a href="{{ route('cetak.invoice', $t->id) }}" class="btn btn-primary"><i class="bi bi-download"></i></a>
+                            @elseif ($t->status === 'verified')
+                            <a href="{{ route('cetak.invoice', $t->id) }}" class="btn btn-primary"><i class="bi bi-download"></i></a>
+                            @else
+                            <button class="btn btn-secondary" disabled><i class="bi bi-download"></i></button>
+                            @endif
                         </td>
 
                     </tr>

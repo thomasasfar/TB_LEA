@@ -14,8 +14,15 @@
                 <div class="card mb-4 mb-xl-0">
                     <div class="card-header">KTP/SIM</div>
                     <div class="card-body text-center">
+                        @if ($transactions->ktp != '')
                         <img src="{{ asset('storage/ktp/' . $transactions->ktp) }}" alt="Gambar Barang"
-                            style="max-width: 300px;">
+                        style="max-width: 300px;">
+                            @else
+                                <!-- Tampilkan gambar placeholder jika tidak ada gambar yang diunggah -->
+                                <img src="{{ asset('placeholder.jpg') }}"
+                                    alt="Gambar Placeholder" style="width: 300px;">
+                            @endif
+
                         <!-- Profile picture upload button-->
                     </div>
                 </div>
@@ -25,18 +32,74 @@
                 <div class="card mb-4">
                     <div class="card-header">Detail Transaksi</div>
                     <div class="card-body personal-info">
-                        <form role="form" method="POST", action="{{ route('profile.update') }}">
-                            @csrf
-                            @method('PUT')
-                            <!-- Form Row-->
                             <div class="row gx-3 mb-3">
                                 <!-- Form Group (first name)-->
-                                <div class="mb-1">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputName">Username</label>
+                                    <input class="form-control" id="inputName" type="text" placeholder="Enter your name"
+                                        value="{{ $transactions->user->username }}" disabled>
+                                </div>
+                                <div class="col-md-6">
                                     <label class="small mb-1" for="inputName">Name</label>
                                     <input class="form-control" id="inputName" type="text" placeholder="Enter your name"
-                                        value="{{ $user->nama }}" name="nama">
+                                        value="{{ $transactions->user->nama }}" disabled>
                                 </div>
-                                <div class="mb-1">
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (first name)-->
+                                <div class="col-md-4">
+                                    <label class="small mb-1" for="inputName">Kode Barang</label>
+                                    <input class="form-control" id="inputName" type="text"
+                                        value="{{ $transactions->barang->kode }}" disabled>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="small mb-1" for="inputName">Nama Barang</label>
+                                    <input class="form-control" id="inputName" type="text"
+                                        value="{{ $transactions->barang->nama_barang }}" disabled>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="small mb-1" for="inputName">Harga per Hari</label>
+                                    <input class="form-control" id="inputName" type="text"
+                                        value="Rp{{ $transactions->barang->harga }}" disabled>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (first name)-->
+                                <div class="col-md-4">
+                                    <label class="small mb-1" for="inputName">Tanggal Peminjaman</label>
+                                    <input class="form-control" id="inputName" type="date"
+                                        value="{{ $transactions->hari_ambil }}" disabled>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="small mb-1" for="inputName">Tanggal Pengembalian</label>
+                                    <input class="form-control" id="inputName" type="date"
+                                        value="{{ $transactions->hari_kembali }}" disabled>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="small mb-1" for="inputName">Lama Peminjaman</label>
+                                    <input class="form-control" id="inputName" type="text"
+                                        value="{{ $transactions->lama_peminjaman }} hari" disabled>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (first name)-->
+                                <div class="col-md-4">
+                                    <label class="small mb-1" for="inputName">Tanggal Peminjaman</label>
+                                    <input class="form-control" id="inputName" type="date"
+                                        value="{{ $transactions->hari_ambil }}" disabled>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="small mb-1" for="inputName">Tanggal Pengembalian</label>
+                                    <input class="form-control" id="inputName" type="date"
+                                        value="{{ $transactions->hari_kembali }}" disabled>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="small mb-1" for="inputName">Lama Peminjaman</label>
+                                    <input class="form-control" id="inputName" type="text"
+                                        value="{{ $transactions->lama_peminjaman }} hari" disabled>
+                                </div>
+                            </div>
+                                {{-- <div class="mb-1">
                                     <label class="small mb-1" for="inputUsername">Username</label>
                                     <input class="form-control" id="inputUsername" type="text"
                                         placeholder="Enter your username" value="{{ $user->username }}" name="username">
@@ -59,8 +122,7 @@
                                 <!-- Change Password-->
                                 <div class="col-md-6">
                                     <p><a href="/password">Change Password?</a></p>
-                                </div>
-                        </form>
+                                </div> --}}
                     </div>
                 </div>
             </div>
